@@ -1,5 +1,5 @@
 import openSocket from 'socket.io-client';
-const socket = openSocket('http://localhost:8080');
+const socket = openSocket('https://commune.fun:8080');
 
 function subscribeToRooms(cb) {
   socket.on('rooms', rooms => {
