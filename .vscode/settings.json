@@ -1,0 +1,59 @@
+{
+  "editor.codeLens": true,
+  "editor.renderWhitespace": "none",
+  "editor.autoIndent": true,
+  "editor.tabSize": 2,
+  "editor.wordWrap": "off",
+  "editor.formatOnSave": true,
+  "files.autoSave": "off",
+  "files.autoSaveDelay": 2000,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/*.js": {
+      "when": "$(basename).ts"
+    },
+    "**/*.js.map": {
+      "when": "$(basename)"
+    }
+  },
+  "files.hotExit": "onExit",
+  "files.defaultLanguage": "typescript",
+  "files.trimTrailingWhitespace": true,
+
+  // use Prettier for all language (ts, scss, etc) formatting
+  "prettier.singleQuote": true,
+  "prettier.printWidth": 100,
+  "prettier.disableLanguages": ["html"], // use Beautify instead
+
+  // use Beautify just for HTML formatting
+  "beautify.language": {
+    "html": ["html"],
+    "css": [],
+    "js": []
+  },
+
+  "beautify.config": {
+    "html": {
+      "indent_size": 2,
+      "indent_char": " ",
+      "indent_inner_html": true,
+      "wrap_attributes": "force-aligned", // Issue to allow max-len wrap: https://github.com/beautify-web/js-beautify/issues/1262
+      "wrap_indent": 8,
+      "max_preserve_newlines": 1,
+      "unformatted": ["sub", "sup", "b", "i", "u"]
+    }
+  },
+
+  // disable default JavaScript formatter (For Prettier)
+  "javascript.format.enable": false,
+
+  // disable built-it linter in favor of stylelint
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false,
+  "workbench.colorCustomizations": {},
+  "cSpell.words": [
+    "uuidv"
+  ]
+}

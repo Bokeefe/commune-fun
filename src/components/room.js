@@ -99,7 +99,7 @@ class Room extends React.Component {
         </div>
 
         <RoomOrganizer users={this.state.users} />
-        <Meme />
+
         <Chat
           callSign={this.state.callSign}
           messages={this.state.messages}
