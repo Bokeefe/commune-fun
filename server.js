@@ -27,7 +27,11 @@ fs.readdir('./src/games/meme/cursed', (err, files) => {
 io.on('connection', function(client) {
   client.emit('rooms', rooms);
 
-  client.on('subscribeToRooms', () => {});
+  client.on('subscribeToRooms', () => {
+    // setInterval(() => {
+    client.emit('rooms', rooms);
+    // }, 500);
+  });
 
   client.on('joinRoom', function(req, callback) {
     if (req.room.replace(/\s/g, '').length > 0 && req.username.replace(/\s/g, '').length > 0) {
