@@ -1,0 +1,7 @@
+div {
+  margin: 0 auto;
+}
+.user-container {
+  display: flex;
+  justify-content: space-evenly;
+}

@@ -1,0 +1,18 @@
+form {
+  display: grid;
+  font-family: 'OldE';
+}
+
+input,
+button,
+select,
+option {
+  border: 5px solid black;
+  font-family: 'OldE';
+  margin: 0.5rem;
+  text-align: center;
+}
+
+button {
+  background: lightgrey;
+}
