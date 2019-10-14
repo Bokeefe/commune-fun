@@ -19,17 +19,15 @@ export class Home extends React.Component {
   }
 
   componentDidMount() {
-    // subscribeToRooms(rooms => {
-    //   for (const key in rooms) {
-    //     if (this.state.rooms.indexOf(key) === -1) {
-    //       console.log(key);
-    //       const concatRooms = this.state.rooms.concat(key);
-    //       this.setState({ rooms: concatRooms });
-    //     }
-    //   }
-    // });
-    const fakeRooms = ['one', 'two', 'three', 'four'];
-    this.setState({ rooms: fakeRooms });
+    subscribeToRooms(rooms => {
+      for (const key in rooms) {
+        if (this.state.rooms.indexOf(key) === -1) {
+          console.log(key);
+          const concatRooms = this.state.rooms.concat(key);
+          this.setState({ rooms: concatRooms });
+        }
+      }
+    });
   }
 
   componentWillUnmount() {}
