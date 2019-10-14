@@ -10,7 +10,7 @@ var rooms = {};
 
 app.use(express.static(__dirname + '/build'));
 
-app.get('/*', (req, res) => {
+app.get('/', (req, res) => {
   res.sendFile(path.resolve('build/index.html'), { root: __dirname }, err => {
     if (err) {
       res.status(500).send(err);
