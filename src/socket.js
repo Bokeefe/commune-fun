@@ -1,5 +1,5 @@
 import openSocket from 'socket.io-client';
-const socket = openSocket('127.0.0.1:8080');
+const socket = openSocket('localhost:8080');
 
 function subscribeToRooms(cb) {
   socket.on('rooms', rooms => {
