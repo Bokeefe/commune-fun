@@ -1,14 +1,14 @@
 form {
   display: grid;
-  font-family: 'OldE';
+  height: 90vh;
 }
 
 input,
 button,
 select,
 option {
-  border: 5px solid black;
-  font-family: 'OldE';
+  border: 2px solid black;
+  font-size: 2rem;
   margin: 0.5rem;
   text-align: center;
 }

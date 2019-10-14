@@ -1,6 +1,7 @@
 import React from 'react';
 import './home.css';
-import { subscribeToRooms } from '../socket';
+import openSocket from 'socket.io-client';
+const socket = openSocket('http://localhost:8080');
 
 export class Home extends React.Component {
   state = {
@@ -19,8 +20,7 @@ export class Home extends React.Component {
   }
 
   componentDidMount() {
-    subscribeToRooms(rooms => {
-      console.log('FE rooms sub', rooms);
+    socket.on('rooms', rooms => {
       for (const key in rooms) {
         if (this.state.rooms.indexOf(key) === -1) {
           const concatRooms = this.state.rooms.concat(key);
@@ -52,6 +52,11 @@ export class Home extends React.Component {
     return (
       <div className="home">
         <form>
+          {this.state.rooms.map(room => (
+            <div>
+              <p key={room}>{room}</p>
+            </div>
+          ))}
           <select onChange={this.onPickRoom}>
             <option value="Pick existing room" key="Pick existing room">
               ▼ PICK AN EXISTING ROOM
