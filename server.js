@@ -8,12 +8,22 @@ var connectedUsers = {};
 var cursed = [];
 var rooms = {};
 
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/build'));
+
+app.get('/*', (req, res) => {
+  res.sendFile(path.resolve('build/index.html'), { root: __dirname }, err => {
+      if (err) {
+          res.status(500).send(err);
+      }
+  });
+});
+
 fs.readdir('./src/games/meme/cursed', (err, files) => {
   files.forEach(file => {
     cursed.push(file);
   });
 });
+
 io.on('connection', function(client) {
   client.on('subscribeToRooms', () => {
     setInterval(() => {
