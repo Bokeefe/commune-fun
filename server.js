@@ -12,9 +12,9 @@ app.use(express.static(__dirname + '/build'));
 
 app.get('/*', (req, res) => {
   res.sendFile(path.resolve('build/index.html'), { root: __dirname }, err => {
-      if (err) {
-          res.status(500).send(err);
-      }
+    if (err) {
+      res.status(500).send(err);
+    }
   });
 });
 
@@ -25,11 +25,9 @@ fs.readdir('./src/games/meme/cursed', (err, files) => {
 });
 
 io.on('connection', function(client) {
-  client.on('subscribeToRooms', () => {
-    setInterval(() => {
-      client.emit('rooms', rooms);
-    }, 500);
-  });
+  client.emit('rooms', rooms);
+
+  client.on('subscribeToRooms', () => {});
 
   client.on('joinRoom', function(req, callback) {
     if (req.room.replace(/\s/g, '').length > 0 && req.username.replace(/\s/g, '').length > 0) {
@@ -98,7 +96,7 @@ io.on('connection', function(client) {
 
   client.emit('message', {
     username: '🤖',
-    text: 'Hey there! Ask someone to join this chat room to start talking.',
+    text: 'Hey there! Ask someone to join this chat room to start talking.'
   });
 });
 
