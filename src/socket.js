@@ -2,11 +2,16 @@ import openSocket from 'socket.io-client';
 const socket = openSocket('http://localhost:8080');
 
 function subscribeToRooms(cb) {
-  console.log('socket services');
   socket.on('rooms', rooms => {
     cb(rooms);
   });
   socket.emit('subscribeToRooms');
+}
+
+function updateGame(cb) {
+  socket.on('updateGame', game => {
+    cb(game);
+  });
 }
 
 function updateRoom(cb) {
@@ -23,4 +28,4 @@ function joinedRoom(cb) {
   socket.on('joinedRoom', room => cb(room));
 }
 
-export { joinRoom, joinedRoom, updateRoom, subscribeToRooms };
+export { joinRoom, joinedRoom, updateGame, updateRoom, subscribeToRooms };

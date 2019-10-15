@@ -1,11 +1,11 @@
 import React from 'react';
 import history from '../history';
-import openSocket from 'socket.io-client';
 import { NavLink } from 'react-router-dom';
 import Meme from '../games/meme/meme';
 import Chat from './chat';
 import RoomOrganizer from './room_organizer';
 
+import openSocket from 'socket.io-client';
 const socket = openSocket('http://localhost:8080');
 
 class Room extends React.Component {
@@ -13,7 +13,7 @@ class Room extends React.Component {
     super(props);
     this.state = {
       callSign: this.props.callSign,
-      game: 'nightmareUpload',
+      game: null,
       roomName: this.props.roomName,
       messages: [],
       users: []
@@ -28,32 +28,31 @@ class Room extends React.Component {
     // const callSign = this.props.callSign ? this.props.callSign : this.createCallSign();
     const callSign = this.props.callSign ? this.props.callSign : this.createCallSign();
 
-    this.setState({
-      roomName: this.props.roomName
-        ? this.props.roomName
-        : history.location.pathname.replace('/', '')
-    });
-
     this.setState({ callSign: callSign, roomName: roomName }, () => {
       socket.emit(
         'joinRoom',
         { room: this.state.roomName, username: this.state.callSign },
         room => {
           if (!room.nameTaken) {
-            console.log('sdffgdghkmskdmfds', room);
             this.appendMessage(room.username, room.message);
+          }
+
+          if (room.game) {
+            this.updateGame(room.game);
+            console.log(1, room.game);
           }
         }
       );
     });
 
-    socket.on('updateRoom', room => {
-      console.log('updateRoom', room.room.users);
-      this.setState({ users: room.room.users });
-    });
-
     socket.on('message', message => {
       this.appendMessage(message.username, message.text);
+    });
+
+    socket.on('updateGame', gameData => {
+      console.log(2);
+
+      this.updateGame(gameData);
     });
   }
 
@@ -66,6 +65,10 @@ class Room extends React.Component {
       this.setState({ messages: concatMsgs });
     }
   }
+
+  updateGame = game => {
+    this.setState({ game: game });
+  };
 
   createCallSign() {
     // const callSign = prompt('create a callsign for the game room:');
@@ -87,6 +90,7 @@ class Room extends React.Component {
   }
 
   render() {
+    console.log(this.state.game);
     return (
       <div className="room">
         <div>
@@ -95,10 +99,11 @@ class Room extends React.Component {
               🏰
             </span>
           </NavLink>
-          Welcome to {this.state.roomName} playing {this.state.game}
+          Welcome to {this.state.roomName}
+          <RoomOrganizer users={this.state.users} />
         </div>
 
-        <RoomOrganizer users={this.state.users} />
+        <Meme updateGame={this.updateGame.bind(this)} game={this.state.game} />
 
         <Chat
           callSign={this.state.callSign}

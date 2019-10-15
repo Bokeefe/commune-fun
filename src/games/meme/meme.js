@@ -1,35 +1,40 @@
 import React from 'react';
 import './meme.css';
 
+import Img from './image';
+import { updateGame } from '../../socket';
+import { runInThisContext } from 'vm';
+
 var imgs = require('./meme_img_array.json');
 var quotes = require('./bottom_text.json');
 
 class Meme extends React.Component {
   constructor(props) {
     super(props);
-    this.pickRandomQuote();
+    this.state = {
+      loaded: false,
+      game: null
+    };
+
+    setTimeout(() => {
+      this.setState({ loaded: true, game: this.props.game });
+    }, 500);
   }
 
-  pickRandomImg() {
-    return imgs[Math.floor(Math.random() * imgs.length)];
-  }
+  componentDidMount() {}
 
-  pickRandomQuote() {
-    console.log(quotes[Math.floor(Math.random() * quotes.length)].quote);
-    return quotes[Math.floor(Math.random() * quotes.length)].quote;
+  content() {
+    return (
+      <div>
+        <h1>{this.state.game.name}</h1>
+        <img src={require(`./${this.state.game.name}/${this.state.game.imgIndex}.png`)} />
+        <h3>bottom text</h3>
+      </div>
+    );
   }
 
   render() {
-    return (
-      <div>
-        <div className="img-container">
-          <img src={require('./cursed/' + this.pickRandomImg())} />
-        </div>
-        <div>
-          <h3>{this.pickRandomQuote()}</h3>
-        </div>
-      </div>
-    );
+    return <div>{this.state.loaded ? this.content() : null}</div>;
   }
 }
 
