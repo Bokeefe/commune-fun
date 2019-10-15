@@ -2,10 +2,6 @@ import React from 'react';
 import './room_organizer.css';
 
 class RoomOrganizer extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return this.props.users.length ? (
       <div>

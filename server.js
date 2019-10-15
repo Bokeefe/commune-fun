@@ -18,7 +18,7 @@ var exGameData = {
     { quote: 'second quote', tally: 0 },
     { quote: 'third quote', tally: 0 }
   ],
-  clents: {
+  clients: {
     brendan: {
       quotes: [3, 7, 4, 9, 8],
       choice: 7
@@ -78,7 +78,12 @@ io.on('connection', function(client) {
 
         if (!roomTaken) {
           if (!rooms[req.room]) {
-            rooms[req.room] = { users: [req.username], game: exGameData };
+            const gameData = {
+              name: 'blessed',
+              imgIndex: 1,
+              quotes: [],
+              clients: {}
+            };
           } else {
             rooms[req.room].users.push(req.username);
             console.log(rooms[req.room]);
@@ -97,6 +102,16 @@ io.on('connection', function(client) {
           username: '🤖',
           text: req.username + ' has joined!'
         });
+
+        client.on('startGame', nameOfTheGame => {
+          var quoteIndexArr = getArrayOfIndexes(bottomText);
+          quoteIndexArr = suffleArray(quoteIndexArr);
+
+          rooms[req.room] = { users: [req.username], game: exGameData };
+          deal(quoteIndexArr, 5, 5);
+          console.log(nameOfTheGame + ' started in ' + req.room);
+          io.to(connectedUsers[client.id].room).emit('updateGame', deal(quoteIndexArr, 5, 5));
+        });
       }
     } else {
       callback({
@@ -104,16 +119,7 @@ io.on('connection', function(client) {
         error: 'Hey, please fill out the form!'
       });
     }
-    var count = 0;
 
-    setInterval(() => {
-      console.log(req.room, count);
-      client.broadcast.to(req.room).emit('message', { username: 'fake', message: 'kjdsnf' });
-      count++;
-    }, 3000);
-    client.on('getGame', function() {
-      console.log('meme room hit');
-    });
     /////////
     client.on('disconnect', function() {
       var userData = connectedUsers[client.id];
@@ -129,6 +135,7 @@ io.on('connection', function(client) {
   });
 
   client.on('message', function(message) {
+    console.log('got a message', message);
     io.to(connectedUsers[client.id].room).emit('message', message);
   });
 
@@ -141,9 +148,6 @@ io.on('connection', function(client) {
 http.listen(PORT, function() {
   console.log('Server started on port ' + PORT);
 });
-
-var arr1 = getArrayOfIndexes(bottomText);
-arr1 = suffleArray(arr1);
 
 function getArrayOfIndexes(array) {
   let arrayofIndexes = [];
@@ -163,6 +167,10 @@ function suffleArray(array) {
   return array;
 }
 
-function deal(array, deltNumber) {
-  return array.splice(array.length - deltNumber, array.length);
+function deal(array, deltNumber, numberPlaying) {
+  const deltDecks = [];
+  for (let index = 0; index < numberPlaying; index++) {
+    deltDecks.push(array.splice(array.length - deltNumber, array.length));
+  }
+  return deltDecks;
 }

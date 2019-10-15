@@ -1,12 +1,8 @@
 import React from 'react';
 import './meme.css';
 
-import Img from './image';
-import { updateGame } from '../../socket';
-import { runInThisContext } from 'vm';
-
-var imgs = require('./meme_img_array.json');
-var quotes = require('./bottom_text.json');
+// var imgs = require('./meme_img_array.json');
+// var quotes = require('./bottom_text.json');
 
 class Meme extends React.Component {
   constructor(props) {
@@ -18,17 +14,25 @@ class Meme extends React.Component {
 
     setTimeout(() => {
       this.setState({ loaded: true, game: this.props.game });
-    }, 500);
+    }, 1000);
   }
 
-  componentDidMount() {}
+  startGame = e => {
+    this.props.onStartGame(e.target.value);
+  };
 
   content() {
-    return (
+    return !this.state.loaded ? (
+      <h1>LOADING...</h1>
+    ) : (
       <div>
         <h1>{this.state.game.name}</h1>
-        <img src={require(`./${this.state.game.name}/${this.state.game.imgIndex}.png`)} />
-        <h3>bottom text</h3>
+        <img src={require(`./${this.state.game.name}/${this.state.game.imgIndex}.png`)} alt="pet" />
+        <div>
+          <button onClick={this.startGame} value="blessed">
+            Start
+          </button>
+        </div>
       </div>
     );
   }
