@@ -1,6 +1,7 @@
 form {
   display: grid;
-  font-family: 'OldE';
+  font-family: 'GreenFuz';
+  font-size: 2rem;
   height: 90vh;
 }
 

@@ -1,12 +1,21 @@
-/* @font-face {
+@font-face {
   font-family: 'OldE';
   font-weight: 100;
   src: url('../src/fonts/Old_English_Five.ttf') format('truetype'),
     url('../src/fonts/Old_English_Five.woff') format('woff');
-} */
+}
+
+@font-face {
+  font-family: 'BlackWidow';
+  src: local('BlackWidow'), url('../src/fonts/BlackWidow.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'GreenFuz';
+  src: local('GreenFuz'), url('../src/fonts/GREENFUZ.TTF') format('truetype');
+}
 
 header {
-  /* font-family: 'OldE'; */
   text-shadow: 6px 3px 3px rgba(0, 0, 0, 0.41);
   text-transform: uppercase;
 }

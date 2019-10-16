@@ -18,7 +18,7 @@
       "sizes": "384x512"
     }
   ],
-  "start_url": ".",
+  "start_url": "https://commune.fun",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"
