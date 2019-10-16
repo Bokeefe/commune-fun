@@ -2,7 +2,7 @@ import React from 'react';
 import './home.css';
 
 import openSocket from 'socket.io-client';
-const socket = openSocket('https://commune.fun:8080');
+const socket = openSocket('https://commune.fun');
 
 export class Home extends React.Component {
   state = {
