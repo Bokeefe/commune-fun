@@ -14,7 +14,7 @@ class Meme extends React.Component {
 
     setTimeout(() => {
       this.setState({ loaded: true, game: this.props.game });
-    }, 1000);
+    }, 3000);
   }
 
   startGame = e => {
@@ -26,7 +26,7 @@ class Meme extends React.Component {
       <h1>LOADING...</h1>
     ) : (
       <div>
-        <img src={require(`./${this.props.game.name}/${this.props.game.imgIndex}.png`)} alt="pet" />
+        <img src={require(`./blessed/${this.props.game.imgIndex}.png`)} alt="pet" />
         <div>
           <button onClick={this.startGame} value="blessed">
             Start
