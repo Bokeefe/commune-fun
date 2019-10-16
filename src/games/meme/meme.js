@@ -14,7 +14,7 @@ class Meme extends React.Component {
 
     setTimeout(() => {
       this.setState({ loaded: true, game: this.props.game });
-    }, 3000);
+    }, 500);
   }
 
   startGame = e => {
