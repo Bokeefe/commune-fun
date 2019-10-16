@@ -1,6 +1,7 @@
 .room {
   font-family: 'Gushing';
 }
+
 .msg-container {
   border: 2px dotted grey;
   bottom: 0;
@@ -8,6 +9,7 @@
   right: 0;
   width: 100%;
 }
+
 div.messages {
   margin: 0;
   max-height: 7rem;

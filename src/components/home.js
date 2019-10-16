@@ -2,7 +2,7 @@ import React from 'react';
 import './home.css';
 import { subscribeToRooms } from '../socket';
 import openSocket from 'socket.io-client';
-const socket = openSocket('http://localhost:8080');
+const socket = openSocket('https://commune.fun:8080');
 
 export class Home extends React.Component {
   state = {
@@ -22,7 +22,6 @@ export class Home extends React.Component {
 
   componentDidMount() {
     socket.on('rooms', rooms => {
-      console.log('fix this');
       for (const key in rooms) {
         if (this.state.rooms.indexOf(key) === -1) {
           const concatRooms = this.state.rooms.concat(key);
