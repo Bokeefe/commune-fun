@@ -51,7 +51,6 @@ class Room extends React.Component {
     });
 
     this.socket.on('updateGame', game => {
-      console.log('got game', game);
       this.setState({ game });
     });
   }
@@ -110,11 +109,11 @@ class Room extends React.Component {
           <RoomOrganizer users={this.state.users} />
         </div>
 
-        {/* <Meme
+        <Meme
           game={this.state.game}
           updateGame={this.updateGame.bind(this)}
           onStartGame={this.startGame.bind(this)}
-        /> */}
+        />
 
         <Chat
           callSign={this.state.callSign}
