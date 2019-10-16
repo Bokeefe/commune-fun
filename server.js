@@ -52,7 +52,10 @@ io.on('connection', function(client) {
 
         if (!roomTaken) {
           if (!rooms[req.room]) {
-            rooms[req.room] = { users: [req.username], game: { name: 'blessed', imgIndex: 4 } };
+            rooms[req.room] = {
+              users: [req.username],
+              game: { name: 'blessed', imgIndex: getRandomArrayIndex(memeImgs.blessed) }
+            };
             io.emit('rooms', rooms);
           } else {
             rooms[req.room].users.push(req.username);
