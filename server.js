@@ -52,8 +52,8 @@ io.on('connection', function(client) {
 
         if (!roomTaken) {
           if (!rooms[req.room]) {
-            console.log(req);
             rooms[req.room] = { users: [req.username], game: { name: 'blessed', imgIndex: 4 } };
+            io.emit('rooms', rooms);
           } else {
             rooms[req.room].users.push(req.username);
           }
@@ -62,8 +62,6 @@ io.on('connection', function(client) {
           nameAvailable: true,
           game: rooms[req.room].game
         });
-
-        client.emit('rooms', rooms);
 
         client.broadcast.to(req.room).emit('updateRoom', {
           room: rooms[req.room]

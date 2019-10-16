@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const URL = 'http://localhost:3004';
+const URL = 'http://localhost:8080';
 
 export function getRooms() {
   const request = axios.get(`${URL}/getRooms`).then(response => response.data);
