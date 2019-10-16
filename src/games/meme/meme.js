@@ -26,8 +26,8 @@ class Meme extends React.Component {
       <h1>LOADING...</h1>
     ) : (
       <div>
-        <h1>{this.state.game.name}</h1>
-        <img src={require(`./${this.state.game.name}/${this.state.game.imgIndex}.png`)} alt="pet" />
+        <h1>{this.props.game.name}</h1>
+        <img src={require(`./${this.props.game.name}/${this.props.game.imgIndex}.png`)} alt="pet" />
         <div>
           <button onClick={this.startGame} value="blessed">
             Start

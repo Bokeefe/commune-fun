@@ -5,26 +5,10 @@ var http = require('http').Server(app);
 var fs = require('fs');
 var io = require('socket.io')(http);
 var connectedUsers = {};
-var cursed = [];
 var rooms = {};
 
+var memeImgs = require('./src/games/meme/meme_img_array.json');
 var bottomText = require('./src/games/meme/bottom_text.json');
-
-var exGameData = {
-  name: 'blessed',
-  imgIndex: 3,
-  quotes: [
-    { quote: 'first quote', tally: 0 },
-    { quote: 'second quote', tally: 0 },
-    { quote: 'third quote', tally: 0 }
-  ],
-  clients: {
-    brendan: {
-      quotes: [3, 7, 4, 9, 8],
-      choice: 7
-    }
-  }
-};
 
 app.use(express.static(__dirname + '/build'));
 
@@ -36,16 +20,15 @@ app.get('/', (req, res) => {
   });
 });
 
-fs.readdir('./src/games/meme/cursed', (err, files) => {
-  files.forEach(file => {
-    cursed.push(file);
-  });
-});
+// fs.readdir('./src/games/meme/cursed', (err, files) => {
+//   files.forEach(file => {
+//     cursed.push(file);
+//   });
+// });
 
 io.on('connection', function(client) {
   client.emit('rooms', rooms);
   console.log('connection');
-  client.emit('rooms', rooms);
 
   client.on('subscribeToRooms', () => {
     console.log('subtoRooms');
@@ -78,27 +61,24 @@ io.on('connection', function(client) {
 
         if (!roomTaken) {
           if (!rooms[req.room]) {
-            const gameData = {
-              name: 'blessed',
-              imgIndex: 1,
-              quotes: [],
-              clients: {}
-            };
+            console.log(req);
+            rooms[req.room] = { users: [req.username], game: { name: 'blessed', imgIndex: 4 } };
           } else {
             rooms[req.room].users.push(req.username);
-            console.log(rooms[req.room]);
           }
         }
         callback({
           nameAvailable: true,
-          game: exGameData
+          game: rooms[req.room].game
         });
 
         client.broadcast.to(req.room).emit('updateRoom', {
           room: rooms[req.room]
         });
 
-        client.broadcast.to(req.room).emit('message', {
+        io.to(connectedUsers[client.id].room).emit('updateGame', rooms[req.room].game);
+
+        io.to(connectedUsers[client.id].room).emit('message', {
           username: '🤖',
           text: req.username + ' has joined!'
         });
@@ -106,10 +86,7 @@ io.on('connection', function(client) {
         client.on('startGame', nameOfTheGame => {
           var quoteIndexArr = getArrayOfIndexes(bottomText);
           quoteIndexArr = suffleArray(quoteIndexArr);
-
-          rooms[req.room] = { users: [req.username], game: exGameData };
           deal(quoteIndexArr, 5, 5);
-          console.log(nameOfTheGame + ' started in ' + req.room);
           io.to(connectedUsers[client.id].room).emit('updateGame', deal(quoteIndexArr, 5, 5));
         });
       }
@@ -157,6 +134,10 @@ function getArrayOfIndexes(array) {
     i++;
   });
   return arrayofIndexes;
+}
+
+function getRandomArrayIndex(arr) {
+  return Math.floor(Math.random() * arr.length + 1);
 }
 
 function suffleArray(array) {

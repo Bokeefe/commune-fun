@@ -40,8 +40,7 @@ class Room extends React.Component {
           }
 
           if (room.game) {
-            this.updateGame(room.game);
-            console.log(1, room.game);
+            this.setState({ game: room.game });
           }
         }
       );
@@ -52,7 +51,8 @@ class Room extends React.Component {
     });
 
     this.socket.on('updateGame', game => {
-      console.log(game);
+      console.log('got game', game);
+      this.setState({ game });
     });
   }
 
@@ -90,7 +90,6 @@ class Room extends React.Component {
   };
 
   startGame = nameOfTheGame => {
-    console.log(nameOfTheGame);
     this.socket.emit('startGame', nameOfTheGame);
   };
 
@@ -99,7 +98,6 @@ class Room extends React.Component {
   }
 
   render() {
-    console.log(this.state.game);
     return (
       <div className="room">
         <div>
@@ -112,11 +110,11 @@ class Room extends React.Component {
           <RoomOrganizer users={this.state.users} />
         </div>
 
-        <Meme
+        {/* <Meme
           game={this.state.game}
           updateGame={this.updateGame.bind(this)}
           onStartGame={this.startGame.bind(this)}
-        />
+        /> */}
 
         <Chat
           callSign={this.state.callSign}
