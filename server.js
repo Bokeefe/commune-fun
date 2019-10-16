@@ -28,6 +28,7 @@ app.get('/', (req, res) => {
 // });
 
 io.on('connection', function(client) {
+  console.log('someone connected');
   client.emit('rooms', rooms);
 
   client.on('joinRoom', function(req, callback) {
@@ -62,6 +63,7 @@ io.on('connection', function(client) {
               }
             };
             io.emit('rooms', rooms);
+            console.log(req.username + ' joined ' + req.room);
           } else {
             rooms[req.room].users.push(req.username);
             rooms[req.room].game.users.push({ user: req.username, hand: null });
