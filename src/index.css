@@ -15,6 +15,11 @@
   src: local('GreenFuz'), url('../src/fonts/GREENFUZ.TTF') format('truetype');
 }
 
+@font-face {
+  font-family: 'Gushing';
+  src: local('Gushing'), url('../src/fonts/GushingMeadow.ttf') format('truetype');
+}
+
 header {
   text-shadow: 6px 3px 3px rgba(0, 0, 0, 0.41);
   text-transform: uppercase;
