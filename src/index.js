@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import history from './history';
 
 import { Router, Route, Switch } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.css';
 import './index.css';
 
 // COMPONENTS

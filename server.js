@@ -54,11 +54,16 @@ io.on('connection', function(client) {
           if (!rooms[req.room]) {
             rooms[req.room] = {
               users: [req.username],
-              game: { name: 'blessed', imgIndex: getRandomArrayIndex(memeImgs.blessed) }
+              game: {
+                name: 'blessed',
+                imgIndex: getRandomArrayIndex(memeImgs.blessed),
+                users: [{ user: req.username, hand: null }]
+              }
             };
             io.emit('rooms', rooms);
           } else {
             rooms[req.room].users.push(req.username);
+            rooms[req.room].game.users.push({ user: req.username, hand: null });
           }
         }
         callback({
@@ -80,8 +85,14 @@ io.on('connection', function(client) {
         client.on('startGame', nameOfTheGame => {
           var quoteIndexArr = getArrayOfIndexes(bottomText);
           quoteIndexArr = suffleArray(quoteIndexArr);
-          deal(quoteIndexArr, 5, 5);
-          io.to(connectedUsers[client.id].room).emit('updateGame', deal(quoteIndexArr, 5, 5));
+          const dealerDeck = deal(quoteIndexArr, 5, rooms[req.room].game.users.length);
+          let index = 0;
+          for (const user of rooms[req.room].game.users) {
+            user.hand = dealerDeck[index];
+            index++;
+          }
+          console.log(rooms[req.room].game.users[0].hand);
+          io.to(connectedUsers[client.id].room).emit('updateGame', rooms[req.room].game);
         });
       }
     } else {
