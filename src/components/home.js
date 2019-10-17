@@ -1,8 +1,8 @@
 import React from 'react';
 import './home.css';
 
-import openSocket from 'socket.io-client';
-const socket = openSocket('ws://127.0.0.1:8080');
+const io = require('socket.io-client');
+const socket = io('http://localhost:8080');
 
 export class Home extends React.Component {
   state = {

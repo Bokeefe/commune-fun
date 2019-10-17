@@ -4,11 +4,10 @@ import { NavLink } from 'react-router-dom';
 import Meme from '../games/meme/meme';
 import Chat from './chat';
 import RoomOrganizer from './room_organizer';
-
-import openSocket from 'socket.io-client';
+const io = require('socket.io-client');
+const socket = io('http://localhost:8080');
 
 class Room extends React.Component {
-  socket = null;
   constructor(props) {
     super(props);
     this.state = {
@@ -22,8 +21,6 @@ class Room extends React.Component {
   }
 
   componentDidMount() {
-    this.socket = openSocket('http://localhost:8080');
-
     const roomName = this.props.roomName
       ? this.props.roomName
       : history.location.pathname.replace('/', '');
@@ -31,7 +28,7 @@ class Room extends React.Component {
     const callSign = this.props.callSign ? this.props.callSign : this.createCallSign();
 
     this.setState({ callSign: callSign, roomName: roomName }, () => {
-      this.socket.emit(
+      socket.emit(
         'joinRoom',
         { room: this.state.roomName, username: this.state.callSign },
         room => {
@@ -46,11 +43,11 @@ class Room extends React.Component {
       );
     });
 
-    this.socket.on('message', message => {
+    socket.on('message', message => {
       this.appendMessage(message.username, message.text);
     });
 
-    this.socket.on('updateGame', game => {
+    socket.on('updateGame', game => {
       this.setState({ game });
     });
   }
@@ -82,18 +79,18 @@ class Room extends React.Component {
   }
 
   sendMsg = (callSign, message) => {
-    this.socket.emit('message', {
+    socket.emit('message', {
       username: callSign,
       text: message
     });
   };
 
   startGame = nameOfTheGame => {
-    this.socket.emit('startGame', nameOfTheGame);
+    socket.emit('startGame', nameOfTheGame);
   };
 
   socketListeners() {
-    this.socket.on('updateGame', this.updateGame.bind(this));
+    socket.on('updateGame', this.updateGame.bind(this));
   }
 
   render() {
@@ -108,12 +105,6 @@ class Room extends React.Component {
           Welcome to {this.state.roomName}
           <RoomOrganizer users={this.state.users} />
         </div>
-
-        <Meme
-          game={this.state.game}
-          updateGame={this.updateGame.bind(this)}
-          onStartGame={this.startGame.bind(this)}
-        />
 
         <Chat
           callSign={this.state.callSign}
