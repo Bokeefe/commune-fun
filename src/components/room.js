@@ -5,7 +5,7 @@ import Meme from '../games/meme/meme';
 import Chat from './chat';
 import RoomOrganizer from './room_organizer';
 const io = require('socket.io-client');
-const socket = io('http://localhost:8080');
+const socket = io('127.0.0.1:8080');
 
 class Room extends React.Component {
   constructor(props) {
