@@ -1,10 +1,11 @@
-var PORT = process.env.PORT || 8080;
-var express = require('express');
-var app = express();
-var http = require('http').Server(app);
-var fs = require('fs');
-var io = require('socket.io')(http);
-io.set('origins', '*:*');
+const express = require('express');
+const http = require('http');
+const socketIo = require('socket.io');
+const port = process.env.PORT || 8080;
+const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
+
 var connectedUsers = {};
 var rooms = {};
 
@@ -155,6 +156,4 @@ function deal(array, deltNumber, numberPlaying) {
   return deltDecks;
 }
 
-http.listen(PORT, function() {
-  console.log('Server started on port ' + PORT);
-});
+server.listen(port, () => console.log(`Listening on port ${port}`));

@@ -1,9 +1,6 @@
 import React from 'react';
 import './home.css';
 
-const io = require('socket.io-client');
-const socket = io('127.0.0.1:8080');
-
 export class Home extends React.Component {
   state = {
     callSign: '',
@@ -21,14 +18,9 @@ export class Home extends React.Component {
   }
 
   componentDidMount() {
-    socket.on('rooms', rooms => {
-      for (const key in rooms) {
-        if (this.state.rooms.indexOf(key) === -1) {
-          const concatRooms = this.state.rooms.concat(key);
-          this.setState({ rooms: concatRooms });
-        }
-      }
-    });
+    if (this.props.socket) {
+      this.socketListeners();
+    }
   }
 
   componentWillUnmount() {}
@@ -47,6 +39,17 @@ export class Home extends React.Component {
 
   onPickRoom(e) {
     this.setState({ pickedRoom: e.target.value });
+  }
+
+  socketListeners() {
+    this.props.socket.on('rooms', rooms => {
+      for (const key in rooms) {
+        if (this.state.rooms.indexOf(key) === -1) {
+          const concatRooms = this.state.rooms.concat(key);
+          this.setState({ rooms: concatRooms });
+        }
+      }
+    });
   }
 
   render() {

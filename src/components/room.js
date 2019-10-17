@@ -1,11 +1,8 @@
 import React from 'react';
 import history from '../history';
 import { NavLink } from 'react-router-dom';
-import Meme from '../games/meme/meme';
 import Chat from './chat';
 import RoomOrganizer from './room_organizer';
-const io = require('socket.io-client');
-const socket = io('127.0.0.1:8080');
 
 class Room extends React.Component {
   constructor(props) {
@@ -28,26 +25,24 @@ class Room extends React.Component {
     const callSign = this.props.callSign ? this.props.callSign : this.createCallSign();
 
     this.setState({ callSign: callSign, roomName: roomName }, () => {
-      socket.emit(
+      this.props.socket.emit(
         'joinRoom',
         { room: this.state.roomName, username: this.state.callSign },
         room => {
           if (!room.nameTaken) {
             this.appendMessage(room.username, room.message);
           }
-
           if (room.game) {
             this.setState({ game: room.game });
           }
         }
       );
     });
-
-    socket.on('message', message => {
+    this.props.socket.on('message', message => {
       this.appendMessage(message.username, message.text);
     });
 
-    socket.on('updateGame', game => {
+    this.props.socket.on('updateGame', game => {
       this.setState({ game });
     });
   }
@@ -79,18 +74,18 @@ class Room extends React.Component {
   }
 
   sendMsg = (callSign, message) => {
-    socket.emit('message', {
+    this.props.socket.emit('message', {
       username: callSign,
       text: message
     });
   };
 
   startGame = nameOfTheGame => {
-    socket.emit('startGame', nameOfTheGame);
+    this.props.socket.emit('startGame', nameOfTheGame);
   };
 
   socketListeners() {
-    socket.on('updateGame', this.updateGame.bind(this));
+    this.props.socket.on('updateGame', this.updateGame.bind(this));
   }
 
   render() {

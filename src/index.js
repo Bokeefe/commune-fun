@@ -5,15 +5,29 @@ import history from './history';
 import { Router, Route, Switch } from 'react-router-dom';
 import './index.css';
 
+import socketIOClient from 'socket.io-client';
+
 // COMPONENTS
 import Home from './components/home';
 import Room from './components/room';
 
 class App extends React.Component {
   state = {
-    roomName: '',
-    callSign: ''
+    callSign: '',
+    endpoint: 'http://127.0.0.1:8080',
+    response: false,
+    socket: null
   };
+
+  componentDidMount() {
+    const { endpoint } = this.state;
+    const socket = socketIOClient(endpoint);
+    this.setState({ socket: socket });
+    // socket.on('rooms', rooms => {
+    //   console.log('ROOMS>>>>>', rooms);
+    //   this.setState({ rooms: rooms });
+    // });
+  }
 
   navigateToRoom = (roomName, callSign) => {
     this.setState({ roomName: roomName, callSign: callSign });
@@ -31,11 +45,16 @@ class App extends React.Component {
                 <Room
                   roomName={this.state.roomName}
                   callSign={this.state.callSign}
-                  state={this.state}
+                  socket={this.state.socket}
                 />
               )}
             />
-            <Route path="/" component={() => <Home parentCallback={this.navigateToRoom} />} />
+            <Route
+              path="/"
+              component={() => (
+                <Home parentCallback={this.navigateToRoom} socket={this.state.socket} />
+              )}
+            />
           </Switch>
         </div>
       </Router>
