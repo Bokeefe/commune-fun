@@ -14,7 +14,7 @@ import Room from './components/room';
 class App extends React.Component {
   state = {
     callSign: '',
-    endpoint: 'http://127.0.0.1:8080',
+    endpoint: 'ws://127.0.0.1:8080',
     response: false,
     socket: null
   };

@@ -45,7 +45,11 @@ io.on('connection', function(socket) {
       });
       delete connectedUsers[socket.id];
     }
-    console.log(rooms);
+
+    if (Object.keys(connectedUsers).length < 1) {
+      connectedUsers = {};
+      rooms = {};
+    }
   });
 
   socket.on('joinRoom', function(req, callback) {

@@ -97,7 +97,7 @@ class Room extends React.Component {
               🏰
             </span>
           </NavLink>
-          Welcome to {this.state.roomName}
+          Welcome {this.props.callSign} to {this.state.roomName}
           <RoomOrganizer users={this.state.users} />
         </div>
 
