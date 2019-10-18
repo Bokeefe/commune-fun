@@ -31,7 +31,7 @@ app.get('/', (req, res) => {
 
 io.on('connection', function(socket) {
   console.log('A user is connected.');
-
+  socket.emit('connected', true);
   socket.on('disconnect', function() {
     var userData = connectedUsers[socket.id];
     if (typeof userData !== 'undefined') {

@@ -5,7 +5,8 @@ export class Home extends React.Component {
   state = {
     callSign: '',
     rooms: [],
-    pickedRoom: ''
+    pickedRoom: '',
+    connected: false
   };
 
   constructor(props) {
@@ -50,11 +51,17 @@ export class Home extends React.Component {
         }
       }
     });
+
+    this.props.socket.on('connected', isConnected => {
+      this.setState({ connected: isConnected });
+    });
   }
 
   render() {
     return (
       <div className="home">
+        <span>Socket connection ?</span>
+        <input type="checkbox" checked={this.state.connected} readOnly={true} />
         <form>
           <select onChange={this.onPickRoom}>
             <option value="Pick existing room" key="Pick existing room">
