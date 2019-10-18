@@ -69,6 +69,21 @@ io.on('connection', function(socket) {
           text: req.username + ' has joined!',
           timestamp: moment().valueOf()
         });
+        if (!rooms[req.room]) {
+          rooms[req.room] = {
+            users: [req.username],
+            game: {
+              name: 'blessed',
+              imgIndex: getRandomArrayIndex(memeImgs.blessed),
+              users: [{ user: req.username, hand: null }]
+            }
+          };
+          io.emit('rooms', rooms);
+        } else {
+          rooms[req.room].users.push(req.username);
+          rooms[req.room].game.users.push({ user: req.username, hand: null });
+        }
+        io.emit('rooms', rooms);
         callback({
           nameAvailable: true
         });
