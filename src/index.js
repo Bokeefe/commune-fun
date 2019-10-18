@@ -23,10 +23,6 @@ class App extends React.Component {
     const { endpoint } = this.state;
     const socket = socketIOClient(endpoint);
     this.setState({ socket: socket });
-    // socket.on('rooms', rooms => {
-    //   console.log('ROOMS>>>>>', rooms);
-    //   this.setState({ rooms: rooms });
-    // });
   }
 
   navigateToRoom = (roomName, callSign) => {
