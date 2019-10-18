@@ -32,6 +32,8 @@ app.get('/', (req, res) => {
 io.on('connection', function(socket) {
   console.log('A user is connected.');
   socket.emit('connected', true);
+  socket.emit('rooms', rooms);
+
   socket.on('disconnect', function() {
     var userData = connectedUsers[socket.id];
     if (typeof userData !== 'undefined') {
@@ -43,6 +45,7 @@ io.on('connection', function(socket) {
       });
       delete connectedUsers[socket.id];
     }
+    console.log(rooms);
   });
 
   socket.on('joinRoom', function(req, callback) {
@@ -107,4 +110,25 @@ io.on('connection', function(socket) {
     timestamp: moment().valueOf()
   });
 });
+
+function getRandomArrayIndex(arr) {
+  return Math.floor(Math.random() * arr.length + 1);
+}
+
+function suffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function deal(array, deltNumber, numberPlaying) {
+  const deltDecks = [];
+  for (let index = 0; index < numberPlaying; index++) {
+    deltDecks.push(array.splice(array.length - deltNumber, array.length));
+  }
+  return deltDecks;
+}
+
 server.listen(port, () => console.log(`Listening on port ${port}`));

@@ -44,6 +44,7 @@ export class Home extends React.Component {
 
   socketListeners() {
     this.props.socket.on('rooms', rooms => {
+      console.log(rooms);
       for (const key in rooms) {
         if (this.state.rooms.indexOf(key) === -1) {
           const concatRooms = this.state.rooms.concat(key);
