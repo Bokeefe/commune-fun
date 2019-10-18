@@ -20,7 +20,8 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-    this.setState({ endpoint: document.location.origin.replace(/^http/, 'ws') });
+    console.log(document.location.origin.replace(/^http/, 'ws'));
+    this.setState({ endpoint: document.location.origin.replace(/^http/, 'ws') + ':8080' });
     const { endpoint } = this.state;
     const socket = io(endpoint);
     this.setState({ socket: socket });
