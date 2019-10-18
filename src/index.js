@@ -5,7 +5,7 @@ import history from './history';
 import { Router, Route, Switch } from 'react-router-dom';
 import './index.css';
 
-import socketIOClient from 'socket.io-client';
+import io from 'socket.io-client';
 
 // COMPONENTS
 import Home from './components/home';
@@ -14,14 +14,15 @@ import Room from './components/room';
 class App extends React.Component {
   state = {
     callSign: '',
-    endpoint: 'ws://127.0.0.1:443',
+    endpoint: 'ws://localhost:8080',
     response: false,
     socket: null
   };
 
   componentDidMount() {
+    this.setState({ endpoint: document.location.origin.replace(/^http/, 'ws') });
     const { endpoint } = this.state;
-    const socket = socketIOClient(endpoint);
+    const socket = io(endpoint);
     this.setState({ socket: socket });
   }
 
