@@ -22,11 +22,10 @@ class App extends React.Component {
   componentDidMount() {
     console.log(document.location.origin.replace(/^http/, 'ws'));
     if (document.location.origin.startsWith('https')) {
-      document.location.origin.replace(/^https/, 'ws');
+      this.setState({ endpoint: document.location.origin.replace(/^https/, 'ws') + ':8080' });
     } else {
-      document.location.origin.replace(/^http/, 'ws');
+      this.setState({ endpoint: document.location.origin.replace(/^http/, 'ws') + ':8080' });
     }
-    this.setState({ endpoint: document.location.origin.replace(/^http/, 'ws') + ':8080' });
     const { endpoint } = this.state;
     const socket = io(endpoint);
     this.setState({ socket: socket });
