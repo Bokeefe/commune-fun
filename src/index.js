@@ -22,9 +22,9 @@ class App extends React.Component {
   componentDidMount() {
     console.log(document.location.origin.replace(/^http/, 'ws'));
     if (document.location.origin.startsWith('https')) {
-      this.setState({ endpoint: document.location.origin.replace(/^https/, 'ws') + ':8080' });
+      this.setState({ endpoint: document.location.origin.replace(/^https/, 'ws') });
     } else {
-      this.setState({ endpoint: document.location.origin.replace(/^http/, 'ws') + ':8080' });
+      this.setState({ endpoint: document.location.origin.replace(/^http/, 'ws') });
     }
 
     this.initSocket();
