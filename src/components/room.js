@@ -13,7 +13,7 @@ class Room extends React.Component {
       roomName: this.props.roomName,
       messages: [],
       users: [],
-      room: { game: null }
+      room: { game: null, users: [] }
     };
     this.sendMsg.bind(this);
   }
@@ -30,23 +30,10 @@ class Room extends React.Component {
         'joinRoom',
         { room: this.state.roomName, username: this.state.callSign },
         room => {
+          console.log('ROOM>>>', room);
           this.setState({ room });
         }
       );
-    });
-
-    this.props.socket.on('message', message => {
-      this.appendMessage(message.username, message.text);
-    });
-
-    this.props.socket.on('updateGame', game => {
-      console.log('DONT USE', game);
-      this.setState({ game });
-    });
-
-    this.props.socket.on('updateRoom', room => {
-      console.log(room);
-      this.setState({ room });
     });
   }
 
@@ -92,7 +79,19 @@ class Room extends React.Component {
   };
 
   socketListeners() {
-    this.props.socket.on('updateGame', this.updateGame.bind(this));
+    this.props.socket.on('updateRoom', this.updateRoom.bind(this));
+    this.props.socket.on('message', message => {
+      this.appendMessage(message.username, message.text);
+    });
+
+    this.props.socket.on('updateGame', game => {
+      console.log('DONT USE', game);
+      this.setState({ game });
+    });
+
+    this.props.socket.on('updateRoom', room => {
+      this.setState({ room });
+    });
   }
 
   render() {
@@ -105,7 +104,7 @@ class Room extends React.Component {
             </span>
           </NavLink>
           Welcome {this.props.callSign} to {this.state.roomName}
-          <RoomOrganizer users={this.state.users} />
+          <RoomOrganizer users={this.state.room.users} />
         </div>
 
         <Meme game={this.state.room.game} />

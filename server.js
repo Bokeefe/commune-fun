@@ -12,14 +12,16 @@ var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 const port = process.env.PORT || 8080;
 var moment = require('moment');
-
+var fs = require('fs');
 var connectedUsers = {};
 var rooms = {};
 
-var memeImgs = require('./src/games/meme/meme_img_array.json');
 var bottomText = require('./src/games/meme/bottom_text.json');
+var imgDir = require('./src/games/meme/meme_img.json');
+let imgObj = {};
 
 app.use(express.static(__dirname + '/build'));
+const imgPath = './src/games/meme/imgs/';
 
 app.get('/', (req, res) => {
   res.sendFile(path.resolve('build/index.html'), { root: __dirname }, err => {
@@ -28,12 +30,7 @@ app.get('/', (req, res) => {
     }
   });
 });
-
-// fs.readdir('./src/games/meme/cursed', (err, files) => {
-//   files.forEach(file => {
-//     cursed.push(file);
-//   });
-// });
+console.log(imgDir.blessed);
 
 io.on('connection', function(socket) {
   console.log('A user is connected.');
@@ -87,7 +84,7 @@ io.on('connection', function(socket) {
             users: [req.username],
             game: {
               name: 'blessed',
-              imgIndex: getRandomArrayIndex(memeImgs.blessed),
+              imgIndex: getRandomArrayIndex(imgDir.blessed),
               users: [{ user: req.username, hand: null }]
             }
           };
@@ -118,7 +115,38 @@ io.on('connection', function(socket) {
     text: 'Hey there! Ask someone to join this chat room to start talking.',
     timestamp: moment().valueOf()
   });
+
+  socket.on('startGame', nameOfTheGame => {
+    console.log(nameOfTheGame);
+    // var quoteIndexArr = getArrayOfIndexes(bottomText);
+    // quoteIndexArr = suffleArray(quoteIndexArr);
+    // const dealerDeck = deal(quoteIndexArr, 5, rooms[req.room].game.users.length);
+    // let index = 0;
+    // for (const user of rooms[req.room].game.users) {
+    //   user.hand = dealerDeck[index];
+    //   index++;
+    // }
+    // console.log(rooms[req.room].game.users[0].hand);
+    // io.to(connectedUsers[client.id].room).emit('updateGame', rooms[req.room].game);
+  });
 });
+
+// fs.readdir(imgPath, (err, files) => {
+//   files.forEach(dir => {
+//     imgObj[dir] = getFileNames(imgPath, dir);
+//   });
+//   fs.writeFile('./src/games/meme/meme_img.json', JSON.stringify(imgObj), 'utf8', () => {});
+// });
+
+function getFileNames(path, dir) {
+  fileArr = [];
+  fs.readdirSync(path + dir).map(fileName => {
+    if (fileName !== '.DS_Store') {
+      fileArr.push(fileName);
+    }
+  });
+  return fileArr;
+}
 
 function getRandomArrayIndex(arr) {
   return Math.floor(Math.random() * arr.length + 1);
@@ -140,6 +168,6 @@ function deal(array, deltNumber, numberPlaying) {
   return deltDecks;
 }
 
-http.listen(port, function() {
+http.listen(port, () => {
   console.log(`listening on *:${port}`);
 });

@@ -6,3 +6,6 @@
 img {
   max-height: 60vh;
 }
+button {
+  width: 100%;
+}

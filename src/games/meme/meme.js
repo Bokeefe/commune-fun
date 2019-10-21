@@ -1,7 +1,7 @@
 import React from 'react';
 import './meme.css';
 
-// var imgs = require('./meme_img_array.json');
+var imgs = require('./meme_img.json');
 // var quotes = require('./bottom_text.json');
 
 class Meme extends React.Component {
@@ -26,7 +26,12 @@ class Meme extends React.Component {
       <h1>LOADING...</h1>
     ) : (
       <div>
-        <img src={require(`./blessed/${this.props.game.imgIndex}.png`)} alt="pet" />
+        <img
+          src={require(`./imgs/${this.props.game.name}/${
+            imgs[this.props.game.name][this.props.game.imgIndex]
+          }`)}
+          alt={this.props.game.name + ' images'}
+        />
         <div>
           <button onClick={this.startGame} value="blessed">
             Start

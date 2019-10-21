@@ -22,7 +22,6 @@ class App extends React.Component {
   }
 
   initSocket() {
-    console.log(window.location.href.startsWith('http://localhost'));
     const socket = window.location.href.startsWith('http://localhost')
       ? io('localhost:8080')
       : io();
