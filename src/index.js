@@ -14,24 +14,18 @@ import Room from './components/room';
 class App extends React.Component {
   state = {
     callSign: '',
-    endpoint: 'ws://localhost:8080',
-    response: false,
     socket: null
   };
 
   componentDidMount() {
-    // if (document.location.origin.startsWith('https')) {
-    //   this.setState({ endpoint: document.location.origin.replace(/^https/, 'ws') });
-    // } else {
-    //   this.setState({ endpoint: document.location.origin.replace(/^http/, 'ws') });
-    // }
-    // console.log(this.state.endpoint);
-
     this.initSocket();
   }
 
   initSocket() {
-    const socket = io();
+    console.log(window.location.href.startsWith('http://localhost'));
+    const socket = window.location.href.startsWith('http://localhost')
+      ? io('localhost:8080')
+      : io();
 
     this.setState({ socket });
   }

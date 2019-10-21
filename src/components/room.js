@@ -3,7 +3,7 @@ import history from '../history';
 import { NavLink } from 'react-router-dom';
 import Chat from './chat';
 import RoomOrganizer from './room_organizer';
-
+import Meme from '../games/meme/meme';
 class Room extends React.Component {
   constructor(props) {
     super(props);
@@ -12,7 +12,8 @@ class Room extends React.Component {
       game: null,
       roomName: this.props.roomName,
       messages: [],
-      users: []
+      users: [],
+      room: { game: null }
     };
     this.sendMsg.bind(this);
   }
@@ -29,21 +30,23 @@ class Room extends React.Component {
         'joinRoom',
         { room: this.state.roomName, username: this.state.callSign },
         room => {
-          if (!room.nameTaken) {
-            this.appendMessage(room.username, room.message);
-          }
-          if (room.game) {
-            this.setState({ game: room.game });
-          }
+          this.setState({ room });
         }
       );
     });
+
     this.props.socket.on('message', message => {
       this.appendMessage(message.username, message.text);
     });
 
     this.props.socket.on('updateGame', game => {
+      console.log('DONT USE', game);
       this.setState({ game });
+    });
+
+    this.props.socket.on('updateRoom', room => {
+      console.log(room);
+      this.setState({ room });
     });
   }
 
@@ -59,6 +62,10 @@ class Room extends React.Component {
 
   updateGame = game => {
     this.setState({ game: game });
+  };
+
+  updateRoom = room => {
+    this.setState({ room: room });
   };
 
   createCallSign() {
@@ -100,6 +107,8 @@ class Room extends React.Component {
           Welcome {this.props.callSign} to {this.state.roomName}
           <RoomOrganizer users={this.state.users} />
         </div>
+
+        <Meme game={this.state.room.game} />
 
         <Chat
           callSign={this.state.callSign}

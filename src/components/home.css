@@ -10,12 +10,13 @@ select,
 option {
   font-family: 'GreenFuz';
   font-size: 2rem;
-
+  background-color: rgba(73, 73, 73, 0.5);
   border: 2px solid black;
+  color: white;
   padding-left: 1rem;
   margin: 0.5rem;
 }
 
 button {
-  background: lightgrey;
+  /* background: lightgrey; */
 }
