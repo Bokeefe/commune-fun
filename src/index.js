@@ -26,9 +26,14 @@ class App extends React.Component {
     } else {
       this.setState({ endpoint: document.location.origin.replace(/^http/, 'ws') + ':8080' });
     }
-    const { endpoint } = this.state;
-    const socket = io(endpoint);
-    this.setState({ socket: socket });
+
+    this.initSocket();
+  }
+
+  initSocket() {
+    const socket = io(this.state.endpoint);
+
+    this.setState({ socket });
   }
 
   navigateToRoom = (roomName, callSign) => {
@@ -50,15 +55,15 @@ class App extends React.Component {
                   socket={this.state.socket}
                 />
               )}
-            />
+            />{' '}
             <Route
               path="/"
               component={() => (
                 <Home parentCallback={this.navigateToRoom} socket={this.state.socket} />
               )}
-            />
-          </Switch>
-        </div>
+            />{' '}
+          </Switch>{' '}
+        </div>{' '}
       </Router>
     );
   }
