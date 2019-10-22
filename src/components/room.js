@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import Chat from './chat';
 import RoomOrganizer from './room_organizer';
 import Meme from '../games/meme/meme';
+
 class Room extends React.Component {
   constructor(props) {
     super(props);
@@ -13,7 +14,9 @@ class Room extends React.Component {
       roomName: this.props.roomName,
       messages: [],
       users: [],
-      room: { game: null, users: [] }
+      room: {
+        users: []
+      }
     };
     this.sendMsg.bind(this);
   }
@@ -30,11 +33,11 @@ class Room extends React.Component {
         'joinRoom',
         { room: this.state.roomName, username: this.state.callSign },
         room => {
-          console.log('ROOM>>>', room);
           this.setState({ room });
         }
       );
     });
+    this.socketListeners();
   }
 
   appendMessage(callSign, message) {
@@ -46,10 +49,6 @@ class Room extends React.Component {
       this.setState({ messages: concatMsgs });
     }
   }
-
-  updateGame = game => {
-    this.setState({ game: game });
-  };
 
   updateRoom = room => {
     this.setState({ room: room });
@@ -70,28 +69,31 @@ class Room extends React.Component {
   sendMsg = (callSign, message) => {
     this.props.socket.emit('message', {
       username: callSign,
+      roomName: this.state.roomName,
       text: message
     });
   };
 
   startGame = nameOfTheGame => {
-    this.props.socket.emit('startGame', nameOfTheGame);
+    const game = {
+      name: nameOfTheGame,
+      roomName: this.state.roomName
+    };
+    this.props.socket.emit('startGame', game);
   };
 
   socketListeners() {
-    this.props.socket.on('updateRoom', this.updateRoom.bind(this));
-    this.props.socket.on('message', message => {
-      this.appendMessage(message.username, message.text);
-    });
+    if (!this.props.socket) {
+      history.push('/');
+    } else {
+      this.props.socket.on('message', message => {
+        this.appendMessage(message.username, message.text);
+      });
 
-    this.props.socket.on('updateGame', game => {
-      console.log('DONT USE', game);
-      this.setState({ game });
-    });
-
-    this.props.socket.on('updateRoom', room => {
-      this.setState({ room });
-    });
+      this.props.socket.on('updateRoom', room => {
+        this.setState({ room });
+      });
+    }
   }
 
   render() {
@@ -107,7 +109,7 @@ class Room extends React.Component {
           <RoomOrganizer users={this.state.room.users} />
         </div>
 
-        <Meme game={this.state.room.game} />
+        <Meme game={this.state.room.game} onStartGame={this.startGame} />
 
         <Chat
           callSign={this.state.callSign}
@@ -117,8 +119,6 @@ class Room extends React.Component {
       </div>
     );
   }
-
-  componentWillUnmount() {}
 }
 
 export default Room;

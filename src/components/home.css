@@ -1,7 +1,7 @@
 form {
   display: grid;
   font-size: 2rem;
-  height: 90vh;
+  height: 100%;
 }
 
 input,

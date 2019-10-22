@@ -21,7 +21,7 @@ var imgDir = require('./src/games/meme/meme_img.json');
 let imgObj = {};
 
 app.use(express.static(__dirname + '/build'));
-const imgPath = './src/games/meme/imgs/';
+const imgPath = './public/imgs/';
 
 app.get('/', (req, res) => {
   res.sendFile(path.resolve('build/index.html'), { root: __dirname }, err => {
@@ -30,30 +30,10 @@ app.get('/', (req, res) => {
     }
   });
 });
-console.log(imgDir.blessed);
 
-io.on('connection', function(socket) {
-  console.log('A user is connected.');
+io.on('connection', socket => {
   socket.emit('connected', true);
   socket.emit('rooms', rooms);
-
-  socket.on('disconnect', function() {
-    var userData = connectedUsers[socket.id];
-    if (typeof userData !== 'undefined') {
-      socket.leave(connectedUsers[socket.id]);
-      io.to(userData.room).emit('message', {
-        username: 'System',
-        text: userData.username + ' has left!',
-        timestamp: moment().valueOf()
-      });
-      delete connectedUsers[socket.id];
-    }
-
-    if (Object.keys(connectedUsers).length < 1) {
-      connectedUsers = {};
-      rooms = {};
-    }
-  });
 
   socket.on('joinRoom', function(req, callback) {
     if (req.room.replace(/\s/g, '').length > 0 && req.username.replace(/\s/g, '').length > 0) {
@@ -74,25 +54,22 @@ io.on('connection', function(socket) {
       } else {
         connectedUsers[socket.id] = req;
         socket.join(req.room);
+
         socket.broadcast.to(req.room).emit('message', {
           username: 'System',
           text: req.username + ' has joined!',
           timestamp: moment().valueOf()
         });
+
         if (!rooms[req.room]) {
           rooms[req.room] = {
-            users: [req.username],
-            game: {
-              name: 'blessed',
-              imgIndex: getRandomArrayIndex(imgDir.blessed),
-              users: [{ user: req.username, hand: null }]
-            }
+            users: [req.username]
           };
           io.emit('rooms', rooms);
         } else {
           rooms[req.room].users.push(req.username);
           rooms[req.room].game.users.push({ user: req.username, hand: null });
-          io.to(connectedUsers[client.id].room).emit('updateRoom', rooms[req.room]);
+          io.to(req.room).emit('updateRoom', rooms[req.room]);
         }
         io.emit('rooms', rooms);
         callback(rooms[req.room]);
@@ -116,18 +93,39 @@ io.on('connection', function(socket) {
     timestamp: moment().valueOf()
   });
 
-  socket.on('startGame', nameOfTheGame => {
-    console.log(nameOfTheGame);
-    // var quoteIndexArr = getArrayOfIndexes(bottomText);
-    // quoteIndexArr = suffleArray(quoteIndexArr);
-    // const dealerDeck = deal(quoteIndexArr, 5, rooms[req.room].game.users.length);
-    // let index = 0;
-    // for (const user of rooms[req.room].game.users) {
-    //   user.hand = dealerDeck[index];
-    //   index++;
-    // }
-    // console.log(rooms[req.room].game.users[0].hand);
-    // io.to(connectedUsers[client.id].room).emit('updateGame', rooms[req.room].game);
+  socket.on('startGame', game => {
+    console.log(game);
+    rooms[game.roomName].game.active = true;
+    rooms[game.roomName].game.name = game.name;
+    rooms[game.roomName].game.imgIndex = getRandomArrayIndex(imgDir.blessed);
+
+    var quoteIndexArr = getArrayOfIndexes(bottomText);
+    quoteIndexArr = suffleArray(quoteIndexArr);
+    const dealerDeck = deal(quoteIndexArr, 5, rooms[game.roomName].game.users.length);
+    let index = 0;
+    for (const user of rooms[game.roomName].game.users) {
+      user.hand = dealerDeck[index];
+      index++;
+    }
+    io.to(game.roomName).emit('updateRoom', rooms[game.roomName]);
+  });
+
+  socket.on('disconnect', function() {
+    var userData = connectedUsers[socket.id];
+    if (typeof userData !== 'undefined') {
+      socket.leave(connectedUsers[socket.id]);
+      io.to(userData.room).emit('message', {
+        username: 'System',
+        text: userData.username + ' has left!',
+        timestamp: moment().valueOf()
+      });
+      delete connectedUsers[socket.id];
+    }
+
+    if (Object.keys(connectedUsers).length < 1) {
+      connectedUsers = {};
+      rooms = {};
+    }
   });
 });
 
@@ -135,7 +133,7 @@ io.on('connection', function(socket) {
 //   files.forEach(dir => {
 //     imgObj[dir] = getFileNames(imgPath, dir);
 //   });
-//   fs.writeFile('./src/games/meme/meme_img.json', JSON.stringify(imgObj), 'utf8', () => {});
+//   fs.writeFile('./public/games/meme/meme_img.json', JSON.stringify(imgObj), 'utf8', () => {});
 // });
 
 function getFileNames(path, dir) {
@@ -146,6 +144,16 @@ function getFileNames(path, dir) {
     }
   });
   return fileArr;
+}
+
+function getArrayOfIndexes(array) {
+  let arrayofIndexes = [];
+  let i = 0;
+  array.forEach(index => {
+    arrayofIndexes.push(i);
+    i++;
+  });
+  return arrayofIndexes;
 }
 
 function getRandomArrayIndex(arr) {
@@ -169,5 +177,5 @@ function deal(array, deltNumber, numberPlaying) {
 }
 
 http.listen(port, () => {
-  console.log(`listening on *:${port}`);
+  console.log(`listening on HOST:${port}`);
 });

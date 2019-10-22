@@ -60,27 +60,25 @@ export class Home extends React.Component {
   render() {
     return (
       <div className="home">
-        <span> Socket connection ? </span>{' '}
-        <input type="checkbox" checked={this.state.connected} readOnly={true} />{' '}
+        <span> Socket connection ? </span>
+        <input type="checkbox" checked={this.state.connected} readOnly={true} />
         <form>
           <select onChange={this.onPickRoom}>
             <option value="Pick existing room" key="Pick existing room">
-              {' '}
-              ▼PICK AN EXISTING ROOM{' '}
-            </option>{' '}
+              ▼PICK AN EXISTING ROOM
+            </option>
             {this.state.rooms.map(room => (
               <option value={room} key={room}>
-                {' '}
-                {room}{' '}
+                {room}
               </option>
-            ))}{' '}
-          </select>{' '}
+            ))}
+          </select>
           <input type="text" onChange={this.handleNewCallSign} placeholder="Your Call Sign" />
           <input type="text" onChange={this.handleNewRoom} placeholder="New Room Name" />
           <button type="button" onClick={this.handleFormSubmit}>
-            JOIN ROOM{' '}
-          </button>{' '}
-        </form>{' '}
+            JOIN ROOM
+          </button>
+        </form>
       </div>
     );
   }
