@@ -42,7 +42,7 @@ export class Chat extends React.Component {
             id="message"
             type="text"
             onKeyUp={this.handleChatMessage}
-            placeholder="type here"
+            placeholder={`Chat here as ${this.props.callSign}`}
           />
           <button type="button" onClick={this.sendMsg}>
             chat

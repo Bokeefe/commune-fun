@@ -73,10 +73,9 @@ class Room extends React.Component {
     });
   };
 
-  startGame = gameData => {
-    console.log(gameData);
+  startGame = name => {
     const game = {
-      name: gameData.name,
+      name: name,
       roomName: this.state.roomName
     };
     this.props.socket.emit('startGame', game);
@@ -91,7 +90,6 @@ class Room extends React.Component {
       });
 
       this.props.socket.on('updateRoom', room => {
-        console.log('updateRoom', room);
         this.setState({ room });
       });
     }
@@ -106,11 +104,11 @@ class Room extends React.Component {
               🏰
             </span>
           </NavLink>
-          Welcome {this.props.callSign} to {this.state.roomName}
+          Welcome {this.state.roomName}
           <RoomOrganizer users={this.state.room.users} />
         </div>
 
-        <Meme game={this.state.room.game} onStartGame={this.startGame} />
+        <Meme game={this.state.room.game} onStartGame={this.startGame} startGame={this.startGame} />
 
         <Chat
           callSign={this.state.callSign}

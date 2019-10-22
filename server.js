@@ -59,16 +59,18 @@ io.on('connection', socket => {
         if (!rooms[req.room]) {
           rooms[req.room] = {
             users: [req.username],
-            game: { active: false }
+            game: { active: false, users: [] }
           };
+          rooms[req.room].game.users.push({ username: req.username, hand: null });
           io.emit('rooms', rooms);
           io.to(req.room).emit('updateRoom', rooms[req.room]);
 
           // existing room + new user
         } else {
-          console.log(rooms[req.room]);
           rooms[req.room].users.push(req.username);
+          rooms[req.room].game.users.push({ username: req.username, hand: null });
           io.to(req.room).emit('updateRoom', rooms[req.room]);
+          console.log(rooms[req.room].game);
         }
         callback(rooms[req.room]);
       }
@@ -92,20 +94,21 @@ io.on('connection', socket => {
   });
 
   socket.on('startGame', game => {
-    console.log(game);
-    // rooms[game.roomName].game.active = true;
-    // rooms[game.roomName].game.name = game.name;
-    // rooms[game.roomName].game.imgIndex = getRandomArrayIndex(imgDir.blessed);
+    rooms[game.roomName].game.active = true;
+    rooms[game.roomName].game.name = game.name;
+    rooms[game.roomName].game.imgIndex = getRandomArrayIndex(imgDir[game.name]);
 
-    // var quoteIndexArr = getArrayOfIndexes(bottomText);
-    // quoteIndexArr = suffleArray(quoteIndexArr);
-    // const dealerDeck = deal(quoteIndexArr, 5, rooms[game.roomName].game.users.length);
-    // let index = 0;
-    // for (const user of rooms[game.roomName].game.users) {
-    //   user.hand = dealerDeck[index];
-    //   index++;
-    // }
-    // io.to(game.roomName).emit('updateRoom', rooms[game.roomName]);
+    var quoteIndexArr = getArrayOfIndexes(bottomText);
+    quoteIndexArr = suffleArray(quoteIndexArr);
+    const dealerDeck = deal(quoteIndexArr, 5, rooms[game.roomName].game.users.length);
+    let index = 0;
+    for (const user of rooms[game.roomName].game.users) {
+      user.hand = dealerDeck[index];
+      index++;
+    }
+    console.log(rooms[game.roomName].game);
+
+    io.to(game.roomName).emit('updateRoom', rooms[game.roomName]);
   });
 
   socket.on('disconnect', function() {

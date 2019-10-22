@@ -23,9 +23,8 @@ class Meme extends React.Component {
     }, 2000);
   }
 
-  startGame = game => {
-    console.log('startGame', game);
-    this.setState({ game });
+  startGame = name => {
+    this.props.startGame(name);
   };
 
   content() {

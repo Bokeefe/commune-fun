@@ -16,12 +16,17 @@ export class PreGame extends React.Component {
     this.setState({ pickedGame: e.target.value });
   }
 
-  handleFormSubmit() {
-    this.props.startGame(this.state.pickedGame);
+  handleFormSubmit(e) {
+    e.preventDefault();
+    if (this.state.pickedGame) {
+      this.props.startGame(this.state.pickedGame);
+    } else {
+      alert('pick a game or have someone else do it.');
+    }
   }
 
   render() {
-    if (this.props.game) {
+    if (this.props.game.active) {
       return null;
     } else {
       return (
