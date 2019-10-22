@@ -90,6 +90,7 @@ class Room extends React.Component {
       });
 
       this.props.socket.on('updateRoom', room => {
+        console.log('update room called: ', room);
         this.setState({ room });
       });
     }

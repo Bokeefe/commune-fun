@@ -2,6 +2,7 @@ import React from 'react';
 import './meme.css';
 import Img from './image';
 import PreGame from '../pregame';
+import Hand from './Hand';
 
 // var quotes = require('./bottom_text.json');
 
@@ -29,10 +30,15 @@ class Meme extends React.Component {
 
   content() {
     return (
-      <div className="img-container">
-        {this.props.game.active ? <Img game={this.state.game} /> : <p>no image yet</p>}
-
-        <PreGame game={this.state.game} startGame={this.startGame} />
+      <div className="game-container">
+        {this.props.game.active ? (
+          <div>
+            <Img game={this.props.game} />
+            <Hand />
+          </div>
+        ) : (
+          <PreGame game={this.state.game} startGame={this.startGame} />
+        )}
       </div>
     );
   }
