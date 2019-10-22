@@ -12,7 +12,6 @@ export class Home extends React.Component {
   constructor(props) {
     super(props);
     this.handleNewCallSign = this.handleNewCallSign.bind(this);
-
     this.handleNewRoom = this.handleNewRoom.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.onPickRoom = this.onPickRoom.bind(this);
@@ -23,8 +22,6 @@ export class Home extends React.Component {
       this.socketListeners();
     }
   }
-
-  componentWillUnmount() {}
 
   handleNewCallSign(e) {
     this.setState({ callSign: e.target.value });

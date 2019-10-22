@@ -3,7 +3,6 @@ import './meme.css';
 import Img from './image';
 import PreGame from '../pregame';
 
-var imgs = require('./meme_img.json');
 // var quotes = require('./bottom_text.json');
 
 class Meme extends React.Component {
@@ -11,24 +10,30 @@ class Meme extends React.Component {
     super(props);
     this.state = {
       loaded: false,
-      game: null
+      game: { active: false }
     };
 
+    this.content = this.content.bind(this);
+    this.startGame = this.startGame.bind(this);
+  }
+
+  componentDidMount() {
     setTimeout(() => {
       this.setState({ loaded: true, game: this.props.game });
     }, 2000);
   }
 
-  startGame = e => {
-    this.props.onStartGame(e.target.value);
+  startGame = game => {
+    console.log('startGame', game);
+    this.setState({ game });
   };
 
   content() {
     return (
       <div className="img-container">
-        <Img game={this.state.game} />
+        {this.props.game.active ? <Img game={this.state.game} /> : <p>no image yet</p>}
 
-        <PreGame game={this.state.game} />
+        <PreGame game={this.state.game} startGame={this.startGame} />
       </div>
     );
   }

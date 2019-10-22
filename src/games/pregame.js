@@ -4,11 +4,21 @@ export class PreGame extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      games: ['blessed', 'cursed']
+      games: ['blessed', 'cursed'],
+      pickedGame: ''
     };
+
+    this.onPickGame = this.onPickGame.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
   }
 
-  startGame() {}
+  onPickGame(e) {
+    this.setState({ pickedGame: e.target.value });
+  }
+
+  handleFormSubmit() {
+    this.props.startGame(this.state.pickedGame);
+  }
 
   render() {
     if (this.props.game) {
@@ -19,17 +29,17 @@ export class PreGame extends React.Component {
           <h3>Once everyone has joined, someone pick a game and start</h3>
 
           <form>
-            <select onChange={this.onPickRoom}>
-              <option value="Pick existing room" key="Pick existing room">
+            <select onChange={this.onPickGame}>
+              <option value="Pick existing game" key="Pick existing game">
                 ▼PICK A GAME
               </option>
-              {this.state.games.map(room => (
-                <option value={room} key={room}>
-                  {room} images
+              {this.state.games.map(game => (
+                <option value={game} key={game}>
+                  {game} images
                 </option>
               ))}
             </select>
-            <button onClick={this.startGame}>Start Game</button>
+            <button onClick={this.handleFormSubmit}>Start Game</button>
           </form>
         </div>
       );

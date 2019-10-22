@@ -12,7 +12,7 @@
 
 div.messages {
   margin: 0;
-  max-height: 8rem;
+  max-height: 10vh;
   overflow: scroll;
   padding: 0.2rem;
 }

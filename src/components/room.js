@@ -10,7 +10,6 @@ class Room extends React.Component {
     super(props);
     this.state = {
       callSign: this.props.callSign,
-      game: null,
       roomName: this.props.roomName,
       messages: [],
       users: [],
@@ -74,9 +73,10 @@ class Room extends React.Component {
     });
   };
 
-  startGame = nameOfTheGame => {
+  startGame = gameData => {
+    console.log(gameData);
     const game = {
-      name: nameOfTheGame,
+      name: gameData.name,
       roomName: this.state.roomName
     };
     this.props.socket.emit('startGame', game);
@@ -91,6 +91,7 @@ class Room extends React.Component {
       });
 
       this.props.socket.on('updateRoom', room => {
+        console.log('updateRoom', room);
         this.setState({ room });
       });
     }
@@ -99,7 +100,7 @@ class Room extends React.Component {
   render() {
     return (
       <div className="room">
-        <div>
+        <div className="header">
           <NavLink to="/">
             <span role="img" aria-label="home icon">
               🏰
