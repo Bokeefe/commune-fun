@@ -109,17 +109,21 @@ class Room extends React.Component {
           <RoomOrganizer users={this.state.room.users} />
         </div>
 
-        <Meme
-          game={this.state.room.game}
-          startGame={this.startGame}
-          username={this.state.username}
-        />
+        <div className="game-container">
+          <Meme
+            game={this.state.room.game}
+            startGame={this.startGame}
+            username={this.state.username}
+          />
+        </div>
 
-        <Chat
-          username={this.state.username}
-          messages={this.state.messages}
-          onSendMsg={this.sendMsg}
-        />
+        <div className="chat-container">
+          <Chat
+            username={this.state.username}
+            messages={this.state.messages}
+            onSendMsg={this.sendMsg}
+          />
+        </div>
       </div>
     );
   }

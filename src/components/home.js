@@ -57,7 +57,6 @@ export class Home extends React.Component {
   render() {
     return (
       <div className="home">
-        <input type="checkbox" checked={this.state.connected} readOnly={true} />
         <form>
           <select onChange={this.onPickRoom}>
             {this.state.connected ? (

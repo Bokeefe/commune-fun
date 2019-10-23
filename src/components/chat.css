@@ -3,6 +3,7 @@
 }
 
 .msg-container {
+  background: rgba(0, 0, 0, 0.5);
   border: 2px dotted grey;
   bottom: 0;
   position: absolute;
