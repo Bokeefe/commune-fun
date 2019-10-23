@@ -106,7 +106,6 @@ io.on('connection', socket => {
       user.hand = dealerDeck[index];
       index++;
     }
-    console.log(rooms[game.roomName].game);
 
     io.to(game.roomName).emit('updateRoom', rooms[game.roomName]);
   });
