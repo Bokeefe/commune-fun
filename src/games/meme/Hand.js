@@ -15,12 +15,7 @@ class Hand extends React.Component {
   componentDidMount() {
     this.props.game.users.forEach(user => {
       if (user.username === this.props.username) {
-        this.setState({ hand: user.hand }, () => {
-          console.log(
-            this.state.hand,
-            bottomText[this.state.hand[0]].quote + bottomText[this.state.hand[0]].by
-          );
-        });
+        this.setState({ hand: user.hand });
       }
     });
   }
@@ -37,7 +32,7 @@ class Hand extends React.Component {
               </span>
             </div>
             <div className="quote">
-              <p>wadawd </p>
+              <p>{this.state.hand ? bottomText[this.state.hand[this.state.index]].quote : null}</p>
             </div>
             <div>
               <span role="img" className="btn-nav">
