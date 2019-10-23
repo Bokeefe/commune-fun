@@ -2,7 +2,7 @@ import React from 'react';
 import './meme.css';
 import Img from './image';
 import PreGame from '../pregame';
-import Hand from './hand';
+import Hand from './hand.js';
 
 // var quotes = require('./bottom_text.json');
 
