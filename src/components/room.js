@@ -9,7 +9,7 @@ class Room extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      callSign: this.props.callSign,
+      username: this.props.username,
       roomName: this.props.roomName,
       messages: [],
       users: [],
@@ -25,12 +25,12 @@ class Room extends React.Component {
       ? this.props.roomName
       : history.location.pathname.replace('/', '');
 
-    const callSign = this.props.callSign ? this.props.callSign : this.createCallSign();
+    const username = this.props.username ? this.props.username : this.createUserName();
 
-    this.setState({ callSign: callSign, roomName: roomName }, () => {
+    this.setState({ username: username, roomName: roomName }, () => {
       this.props.socket.emit(
         'joinRoom',
-        { room: this.state.roomName, username: this.state.callSign },
+        { room: this.state.roomName, username: this.state.username },
         room => {
           this.setState({ room });
         }
@@ -39,12 +39,12 @@ class Room extends React.Component {
     this.socketListeners();
   }
 
-  appendMessage(callSign, message) {
-    if (this.state.messages.length > 4) {
+  appendMessage(username, message) {
+    if (this.state.messages.length > 2) {
       this.state.messages.shift();
     }
     if (message) {
-      const concatMsgs = this.state.messages.concat({ callSign: callSign, message: message });
+      const concatMsgs = this.state.messages.concat({ username: username, message: message });
       this.setState({ messages: concatMsgs });
     }
   }
@@ -53,11 +53,11 @@ class Room extends React.Component {
     this.setState({ room: room });
   };
 
-  createCallSign() {
-    // const callSign = prompt('create a callsign for the game room:');
-    // if (callSign) {
-    //   this.setState({ callSign: callSign });
-    //   return callSign;
+  createUserName() {
+    // const username = prompt('create a callsign for the game room:');
+    // if (username) {
+    //   this.setState({ username: username });
+    //   return username;
     // } else {
     //   history.push('/');
     //   return null;
@@ -65,9 +65,9 @@ class Room extends React.Component {
     return 'Jimbo';
   }
 
-  sendMsg = (callSign, message) => {
+  sendMsg = (username, message) => {
     this.props.socket.emit('message', {
-      username: callSign,
+      username: username,
       roomName: this.state.roomName,
       text: message
     });
@@ -105,14 +105,18 @@ class Room extends React.Component {
               🏰
             </span>
           </NavLink>
-          Welcome {this.state.roomName}
+          Welcome to {this.state.roomName}
           <RoomOrganizer users={this.state.room.users} />
         </div>
 
-        <Meme game={this.state.room.game} onStartGame={this.startGame} startGame={this.startGame} />
+        <Meme
+          game={this.state.room.game}
+          startGame={this.startGame}
+          username={this.state.username}
+        />
 
         <Chat
-          callSign={this.state.callSign}
+          username={this.state.username}
           messages={this.state.messages}
           onSendMsg={this.sendMsg}
         />

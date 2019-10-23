@@ -18,7 +18,7 @@ export class Chat extends React.Component {
   }
 
   sendMsg = () => {
-    this.props.onSendMsg(this.props.callSign, this.state.message);
+    this.props.onSendMsg(this.props.username, this.state.message);
     document.getElementById('message').value = '';
     this.setState({ message: '' });
   };
@@ -31,7 +31,7 @@ export class Chat extends React.Component {
             return (
               <div key={index}>
                 <span>
-                  <b>{item.callSign}</b>: {item.message}
+                  <b>{item.username}</b>: {item.message}
                 </span>
               </div>
             );
@@ -42,7 +42,7 @@ export class Chat extends React.Component {
             id="message"
             type="text"
             onKeyUp={this.handleChatMessage}
-            placeholder={`Chat here as ${this.props.callSign}`}
+            placeholder={`Chat here as ${this.props.username}`}
           />
           <button type="button" onClick={this.sendMsg}>
             chat

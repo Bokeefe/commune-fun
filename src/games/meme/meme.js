@@ -2,7 +2,7 @@ import React from 'react';
 import './meme.css';
 import Img from './image';
 import PreGame from '../pregame';
-import Hand from './Hand';
+import Hand from './hand';
 
 // var quotes = require('./bottom_text.json');
 
@@ -21,7 +21,7 @@ class Meme extends React.Component {
   componentDidMount() {
     setTimeout(() => {
       this.setState({ loaded: true, game: this.props.game });
-    }, 2000);
+    }, 500);
   }
 
   startGame = name => {
@@ -34,7 +34,7 @@ class Meme extends React.Component {
         {this.props.game.active ? (
           <div>
             <Img game={this.props.game} />
-            <Hand />
+            <Hand game={this.props.game} username={this.props.username} />
           </div>
         ) : (
           <PreGame game={this.state.game} startGame={this.startGame} />

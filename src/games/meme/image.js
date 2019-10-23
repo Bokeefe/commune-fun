@@ -2,10 +2,6 @@ import React from 'react';
 var imgs = require('./meme_img.json');
 
 class Img extends React.Component {
-  componentDidMount() {
-    console.log('img props', this.props);
-  }
-
   render() {
     if (this.props.game.active) {
       return (

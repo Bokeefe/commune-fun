@@ -13,7 +13,7 @@ import Room from './components/room';
 
 class App extends React.Component {
   state = {
-    callSign: '',
+    username: '',
     socket: null
   };
 
@@ -29,8 +29,8 @@ class App extends React.Component {
     this.setState({ socket });
   }
 
-  navigateToRoom = (roomName, callSign) => {
-    this.setState({ roomName: roomName, callSign: callSign });
+  navigateToRoom = (roomName, username) => {
+    this.setState({ roomName: roomName, username: username });
     history.push('/' + roomName);
   };
 
@@ -44,7 +44,7 @@ class App extends React.Component {
               component={() => (
                 <Room
                   roomName={this.state.roomName}
-                  callSign={this.state.callSign}
+                  username={this.state.username}
                   socket={this.state.socket}
                 />
               )}

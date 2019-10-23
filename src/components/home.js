@@ -3,7 +3,7 @@ import './home.css';
 
 export class Home extends React.Component {
   state = {
-    callSign: '',
+    username: '',
     rooms: [],
     pickedRoom: '',
     connected: false
@@ -11,7 +11,7 @@ export class Home extends React.Component {
 
   constructor(props) {
     super(props);
-    this.handleNewCallSign = this.handleNewCallSign.bind(this);
+    this.handleNewUserName = this.handleNewUserName.bind(this);
     this.handleNewRoom = this.handleNewRoom.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.onPickRoom = this.onPickRoom.bind(this);
@@ -23,8 +23,8 @@ export class Home extends React.Component {
     }
   }
 
-  handleNewCallSign(e) {
-    this.setState({ callSign: e.target.value });
+  handleNewUserName(e) {
+    this.setState({ username: e.target.value });
   }
 
   handleNewRoom(e) {
@@ -32,7 +32,7 @@ export class Home extends React.Component {
   }
 
   handleFormSubmit(e) {
-    this.props.parentCallback(this.state.pickedRoom, this.state.callSign);
+    this.props.parentCallback(this.state.pickedRoom, this.state.username);
   }
 
   onPickRoom(e) {
@@ -61,16 +61,23 @@ export class Home extends React.Component {
         <input type="checkbox" checked={this.state.connected} readOnly={true} />
         <form>
           <select onChange={this.onPickRoom}>
-            <option value="Pick existing room" key="Pick existing room">
-              ▼PICK AN EXISTING ROOM
-            </option>
+            {this.state.connected ? (
+              <option value="Pick existing room" key="Pick existing room">
+                ▼PICK AN EXISTING ROOM
+              </option>
+            ) : (
+              <option value="REFRESH browser unconnected" key="refresh">
+                ⚡️REFRESH ⚡️ browser unconnected
+              </option>
+            )}
+
             {this.state.rooms.map(room => (
               <option value={room} key={room}>
                 {room}
               </option>
             ))}
           </select>
-          <input type="text" onChange={this.handleNewCallSign} placeholder="Your Call Sign" />
+          <input type="text" onChange={this.handleNewUserName} placeholder="Your Call Sign" />
           <input type="text" onChange={this.handleNewRoom} placeholder="New Room Name" />
           <button type="button" onClick={this.handleFormSubmit}>
             JOIN ROOM
