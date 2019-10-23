@@ -18,7 +18,7 @@ class Room extends React.Component {
       }
     };
     this.sendMsg.bind(this);
-    this.pickChoice.bind(this);
+    this.onPickChoice.bind(this);
   }
 
   componentDidMount() {
@@ -66,8 +66,9 @@ class Room extends React.Component {
     return 'Jimbo';
   }
 
-  pickChoice = choice => {
-    console.log(choice);
+  onPickChoice = choice => {
+    console.log('great news', choice);
+    this.props.socket.emit('pickChoice', choice);
   };
 
   sendMsg = (username, message) => {
@@ -122,7 +123,7 @@ class Room extends React.Component {
             game={this.state.room.game}
             startGame={this.startGame}
             username={this.state.username}
-            pickChoice={this.pickChoice}
+            onPickChoice={this.onPickChoice}
           />
         </div>
 

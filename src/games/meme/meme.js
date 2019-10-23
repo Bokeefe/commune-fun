@@ -13,6 +13,7 @@ class Meme extends React.Component {
     };
 
     this.content = this.content.bind(this);
+    this.onPickChoice = this.onPickChoice.bind(this);
     this.startGame = this.startGame.bind(this);
   }
 
@@ -21,6 +22,11 @@ class Meme extends React.Component {
       this.setState({ loaded: true, game: this.props.game });
     }, 500);
   }
+
+  onPickChoice = choice => {
+    console.log('meme', choice);
+    this.props.onPickChoice(choice);
+  };
 
   startGame = name => {
     this.props.startGame(name);
@@ -32,7 +38,11 @@ class Meme extends React.Component {
         {this.props.game.active ? (
           <div>
             <Img game={this.props.game} />
-            <Hand game={this.props.game} username={this.props.username} />
+            <Hand
+              game={this.props.game}
+              username={this.props.username}
+              onPickChoice={this.onPickChoice}
+            />
           </div>
         ) : (
           <PreGame game={this.state.game} startGame={this.startGame} />

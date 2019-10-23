@@ -79,6 +79,13 @@ io.on('connection', socket => {
         error: 'Hey, please fill out the form!'
       });
     }
+
+    // listeners in room
+    socket.on('pickChoice', choice => {
+      rooms[req.room].game.choices.push(choice);
+      console.log(rooms[req.room].game.choices);
+      io.to(req.room).emit('updateRoom', rooms[req.room]);
+    });
   });
 
   socket.on('message', function(message) {

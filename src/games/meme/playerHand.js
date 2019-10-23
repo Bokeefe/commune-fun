@@ -24,12 +24,12 @@ class Hand extends React.Component {
 
   handleCaptionChoice() {
     const bottomTextIndex = this.state.hand[this.state.index];
-    console.log(bottomText[bottomTextIndex], this.props.game.users);
     const choice = {
       username: this.props.username,
       choice: bottomText[bottomTextIndex],
       rating: 0
     };
+    this.props.onPickChoice(choice);
   }
 
   updateIndex(numDirection) {
