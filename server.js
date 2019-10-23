@@ -15,7 +15,6 @@ var bottomText = require('./src/games/meme/bottom_text.json');
 var imgDir = require('./src/games/meme/meme_img.json');
 
 app.use(express.static(__dirname + '/build'));
-const imgPath = './public/imgs/';
 
 app.get('/', (req, res) => {
   res.sendFile(path.resolve('build/index.html'), { root: __dirname }, err => {
@@ -129,11 +128,15 @@ io.on('connection', socket => {
   });
 });
 
+const imgPath = './public/imgs/';
+
 // fs.readdir(imgPath, (err, files) => {
 //   files.forEach(dir => {
-//     imgObj[dir] = getFileNames(imgPath, dir);
+//     if (dir !== '.DS_Store') {
+//       imgObj[dir] = getFileNames(imgPath, dir);
+//     }
 //   });
-//   fs.writeFile('./public/games/meme/meme_img.json', JSON.stringify(imgObj), 'utf8', () => {});
+//   fs.writeFile('./src/games/meme/meme_img.json', JSON.stringify(imgObj), 'utf8', () => {});
 // });
 
 function getFileNames(path, dir) {

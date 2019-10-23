@@ -4,8 +4,6 @@ import Img from './image';
 import PreGame from '../pregame';
 import Hand from './playerHand';
 
-// var quotes = require('./bottom_text.json');
-
 class Meme extends React.Component {
   constructor(props) {
     super(props);
