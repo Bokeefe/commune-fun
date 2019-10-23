@@ -11,14 +11,25 @@ class Hand extends React.Component {
       index: 0
     };
     this.updateIndex = this.updateIndex.bind(this);
+    this.handleCaptionChoice = this.handleCaptionChoice.bind(this);
   }
 
   componentDidMount() {
     this.props.game.users.forEach(user => {
       if (user.username === this.props.username) {
-        this.setState({ hand: user.hand }, () => {});
+        this.setState({ hand: user.hand });
       }
     });
+  }
+
+  handleCaptionChoice() {
+    const bottomTextIndex = this.state.hand[this.state.index];
+    console.log(bottomText[bottomTextIndex], this.props.game.users);
+    const choice = {
+      username: this.props.username,
+      choice: bottomText[bottomTextIndex],
+      rating: 0
+    };
   }
 
   updateIndex(numDirection) {
@@ -63,7 +74,7 @@ class Hand extends React.Component {
             </div>
           </div>
 
-          <button>PICK CAPTION</button>
+          <button onClick={this.handleCaptionChoice}>PICK CAPTION</button>
         </div>
       );
     } else {

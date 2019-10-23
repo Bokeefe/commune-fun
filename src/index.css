@@ -56,6 +56,18 @@ body {
   color: #ffffff;
 }
 
+p {
+  margin: 0;
+}
+.btn-home {
+  font-size: 2rem;
+  padding: 1rem;
+}
+
+.font-tiny {
+  font-size: 0.5rem;
+}
+
 .header {
   display: flex;
   max-height: 20vh;

@@ -58,7 +58,7 @@ io.on('connection', socket => {
         if (!rooms[req.room]) {
           rooms[req.room] = {
             users: [req.username],
-            game: { active: false, users: [] }
+            game: { active: false, users: [], choices: [] }
           };
           rooms[req.room].game.users.push({ username: req.username, hand: null });
           io.emit('rooms', rooms);

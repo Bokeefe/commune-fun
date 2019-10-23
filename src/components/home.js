@@ -41,12 +41,14 @@ export class Home extends React.Component {
 
   socketListeners() {
     this.props.socket.on('rooms', rooms => {
+      /* eslint-disable */
       for (const key in rooms) {
         if (this.state.rooms.indexOf(key) === -1) {
           const concatRooms = this.state.rooms.concat(key);
           this.setState({ rooms: concatRooms });
         }
       }
+      /* eslint-enable */
     });
 
     this.props.socket.on('connected', isConnected => {
@@ -64,15 +66,8 @@ export class Home extends React.Component {
                 ▼PICK AN EXISTING ROOM
               </option>
             ) : (
-              <option value="REFRESH browser unconnected" key="refresh">
-                <span role="img" aria-label="lightning bolt">
-                  ⚡️
-                </span>
-                REFRESH{' '}
-                <span role="img" aria-label="lightning bolt">
-                  ⚡️
-                </span>{' '}
-                browser unconnected
+              <option value="REFRESH" key="refresh">
+                REFRESH browser unconnected
               </option>
             )}
 
@@ -82,8 +77,13 @@ export class Home extends React.Component {
               </option>
             ))}
           </select>
+
+          <input
+            type="text"
+            onChange={this.handleNewRoom}
+            placeholder="...or start a New Room Here"
+          />
           <input type="text" onChange={this.handleNewUserName} placeholder="Your Call Sign" />
-          <input type="text" onChange={this.handleNewRoom} placeholder="New Room Name" />
           <button type="button" onClick={this.handleFormSubmit}>
             JOIN ROOM
           </button>

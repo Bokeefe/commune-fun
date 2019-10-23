@@ -18,6 +18,7 @@ class Room extends React.Component {
       }
     };
     this.sendMsg.bind(this);
+    this.pickChoice.bind(this);
   }
 
   componentDidMount() {
@@ -65,6 +66,10 @@ class Room extends React.Component {
     return 'Jimbo';
   }
 
+  pickChoice = choice => {
+    console.log(choice);
+  };
+
   sendMsg = (username, message) => {
     this.props.socket.emit('message', {
       username: username,
@@ -101,12 +106,15 @@ class Room extends React.Component {
       <div className="room">
         <div className="header">
           <NavLink to="/">
-            <span role="img" aria-label="home icon">
-              🏰
+            <span role="img" aria-label="home icon" className="btn-home">
+              🏚️
             </span>
           </NavLink>
-          Welcome to {this.state.roomName}
-          <RoomOrganizer users={this.state.room.users} />
+
+          <div className="font-tiny">
+            Welcome to {this.state.roomName}
+            <RoomOrganizer users={this.state.room.users} game={this.state.game} />
+          </div>
         </div>
 
         <div className="game-container">
@@ -114,6 +122,7 @@ class Room extends React.Component {
             game={this.state.room.game}
             startGame={this.startGame}
             username={this.state.username}
+            pickChoice={this.pickChoice}
           />
         </div>
 
