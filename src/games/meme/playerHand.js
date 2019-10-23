@@ -16,7 +16,7 @@ class Hand extends React.Component {
   componentDidMount() {
     this.props.game.users.forEach(user => {
       if (user.username === this.props.username) {
-        this.setState({ hand: user.hand });
+        this.setState({ hand: user.hand }, () => {});
       }
     });
   }
@@ -25,14 +25,13 @@ class Hand extends React.Component {
     const newIndex = this.state.index + numDirection;
 
     this.setState({ index: newIndex });
-    if (newIndex > 0 && newIndex < this.state.hand.length + 1) {
+    if (newIndex > 0 && newIndex < this.state.hand.length) {
       this.setState({ index: newIndex });
     } else if (newIndex > 0) {
       this.setState({ index: 0 });
     } else {
-      this.setState({ index: this.state.hand.length + 1 });
+      this.setState({ index: this.state.hand.length - 1 });
     }
-    console.log(newIndex > 0 && newIndex < this.state.hand.length + 1, newIndex);
   }
 
   render() {
@@ -46,7 +45,7 @@ class Hand extends React.Component {
                 this.updateIndex(-1);
               }}
             >
-              <span role="img" className="btn-nav">
+              <span role="img" className="btn-nav" aria-label="backward">
                 ◀️
               </span>
             </div>
@@ -58,7 +57,7 @@ class Hand extends React.Component {
                 this.updateIndex(1);
               }}
             >
-              <span role="img" className="btn-nav">
+              <span role="img" className="btn-nav" aria-label="forward">
                 ▶️
               </span>
             </div>

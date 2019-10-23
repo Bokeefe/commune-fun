@@ -65,7 +65,14 @@ export class Home extends React.Component {
               </option>
             ) : (
               <option value="REFRESH browser unconnected" key="refresh">
-                ⚡️REFRESH ⚡️ browser unconnected
+                <span role="img" aria-label="lightning bolt">
+                  ⚡️
+                </span>
+                REFRESH{' '}
+                <span role="img" aria-label="lightning bolt">
+                  ⚡️
+                </span>{' '}
+                browser unconnected
               </option>
             )}
 
