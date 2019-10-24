@@ -3,6 +3,17 @@ form {
   font-size: 1rem;
   height: 40vh;
 }
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
+.blinker {
+  animation: blinker 1s linear infinite;
+  font-family: 'GreenFuz';
+  text-align: center;
+}
 
 input,
 button,
