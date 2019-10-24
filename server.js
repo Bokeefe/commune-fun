@@ -106,7 +106,7 @@ io.on('connection', socket => {
 
     var quoteIndexArr = getArrayOfIndexes(bottomText);
     quoteIndexArr = suffleArray(quoteIndexArr);
-    const dealerDeck = deal(quoteIndexArr, 5, rooms[game.roomName].game.users.length);
+    const dealerDeck = deal(quoteIndexArr, 7, rooms[game.roomName].game.users.length);
     let index = 0;
     for (const user of rooms[game.roomName].game.users) {
       user.hand = dealerDeck[index];

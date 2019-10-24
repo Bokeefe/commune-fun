@@ -10,9 +10,11 @@ form {
 }
 
 .blinker {
-  animation: blinker 1s linear infinite;
+  animation: blinker 2s linear infinite;
   font-family: 'GreenFuz';
+  letter-spacing: 0.3rem;
   text-align: center;
+  width: 100%;
 }
 
 input,

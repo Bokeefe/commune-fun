@@ -80,7 +80,7 @@ p {
 }
 
 .chat-container {
-  max-height: 20vh;
+  /* max-height: 20vh; */
 }
 
 a:-webkit-any-link {
