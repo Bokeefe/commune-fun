@@ -49,7 +49,7 @@ io.on('connection', socket => {
         socket.join(req.room);
 
         socket.broadcast.to(req.room).emit('message', {
-          username: 'System',
+          username: '🤖',
           text: req.username + ' has joined!',
           timestamp: moment().valueOf()
         });
@@ -60,6 +60,10 @@ io.on('connection', socket => {
             users: [req.username],
             game: { active: false, users: [], choices: [], isFinished: false }
           };
+
+          // emit to all sockets that there is a new room
+          io.emit('rooms', rooms);
+
           rooms[req.room].game.users.push({ username: req.username, hand: null });
           io.to(req.room).emit('updateRoom', rooms[req.room]);
 
@@ -67,8 +71,9 @@ io.on('connection', socket => {
         } else {
           rooms[req.room].users.push(req.username);
           rooms[req.room].game.users.push({ username: req.username, hand: null });
+
+          // emit to the room that there is a new user
           io.to(req.room).emit('updateRoom', rooms[req.room]);
-          console.log(rooms[req.room].game);
         }
         callback(rooms[req.room]);
       }
@@ -89,11 +94,14 @@ io.on('connection', socket => {
 
       // check if they already voted
       if (!usersThatVoted.includes(choice.username)) {
-        console.log('getting here?');
         rooms[req.room].game.choices.push(choice);
       }
-      console.log(usersThatVoted, rooms[req.room].users, usersThatVoted.includes(choice.username));
 
+      // if everyone voted
+      if (JSON.stringify(usersThatVoted) === JSON.stringify(rooms[req.room].users)) {
+        console.log('game finished');
+        rooms[req.room].game.isFinished = true;
+      }
       io.to(req.room).emit('updateRoom', rooms[req.room]);
     });
   });
@@ -107,16 +115,15 @@ io.on('connection', socket => {
     io.to(connectedUsers[socket.id].room).emit('message', message);
   });
 
-  socket.emit('message', {
-    username: 'System',
-    text: 'Hey there! Ask someone to join this chat room to start talking.',
-    timestamp: moment().valueOf()
-  });
-
   socket.on('startGame', game => {
+    if (!game) {
+      rooms[game.roomName].game = { active: false, users: [], choices: [], isFinished: false };
+    }
     rooms[game.roomName].game.active = true;
     rooms[game.roomName].game.name = game.name;
     rooms[game.roomName].game.imgIndex = getRandomArrayIndex(imgDir[game.name]);
+    const randomDealer = getRandomArrayIndex(rooms[game.roomName].users);
+    rooms[game.roomName].game.dealer = rooms[game.roomName].users[randomDealer];
 
     var quoteIndexArr = getArrayOfIndexes(bottomText);
     quoteIndexArr = suffleArray(quoteIndexArr);
@@ -124,9 +131,11 @@ io.on('connection', socket => {
     let index = 0;
     for (const user of rooms[game.roomName].game.users) {
       user.hand = dealerDeck[index];
+      user.voted = false;
       index++;
     }
 
+    // emit to room that there is now a game
     io.to(game.roomName).emit('updateRoom', rooms[game.roomName]);
   });
 
@@ -135,7 +144,7 @@ io.on('connection', socket => {
     if (typeof userData !== 'undefined') {
       socket.leave(connectedUsers[socket.id]);
       io.to(userData.room).emit('message', {
-        username: 'System',
+        username: '🤖',
         text: userData.username + ' has left!',
         timestamp: moment().valueOf()
       });
@@ -160,7 +169,7 @@ function getArrayOfIndexes(array) {
 }
 
 function getRandomArrayIndex(arr) {
-  return Math.floor(Math.random() * arr.length + 1);
+  return Math.floor(Math.random() * arr.length);
 }
 
 function suffleArray(array) {

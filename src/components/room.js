@@ -26,8 +26,7 @@ class Room extends React.Component {
       ? this.props.roomName
       : history.location.pathname.replace('/', '');
 
-    const username = this.props.username ? this.props.username : this.createUserName();
-
+    const username = this.props.username ? this.props.username : history.push('/');
     this.setState({ username: username, roomName: roomName }, () => {
       this.props.socket.emit(
         'joinRoom',
@@ -55,15 +54,14 @@ class Room extends React.Component {
   };
 
   createUserName() {
-    // const username = prompt('create a callsign for the game room:');
-    // if (username) {
-    //   this.setState({ username: username });
-    //   return username;
-    // } else {
-    //   history.push('/');
-    //   return null;
-    // }
-    return 'Jimbo';
+    const username = prompt('create a callsign for the game room:');
+    if (username) {
+      this.setState({ username: username });
+      return username;
+    } else {
+      history.push('/');
+      return null;
+    }
   }
 
   onPickChoice = choice => {
@@ -83,7 +81,10 @@ class Room extends React.Component {
       name: name,
       roomName: this.state.roomName
     };
-    this.props.socket.emit('startGame', game);
+    console.log(name);
+    if (name) {
+      this.props.socket.emit('startGame', game);
+    }
   };
 
   socketListeners() {
@@ -115,10 +116,15 @@ class Room extends React.Component {
               🏚️
             </span>
           </NavLink>
-
           <div className="font-tiny">
             Welcome to {this.state.roomName}
             <RoomOrganizer users={this.state.room.users} game={this.state.game} />
+          </div>
+
+          <div onClick={() => this.startGame('cursed')}>
+            <span role="img" aria-label="home icon" className="btn-home">
+              🔄
+            </span>
           </div>
         </div>
 
@@ -128,6 +134,7 @@ class Room extends React.Component {
             startGame={this.startGame}
             username={this.state.username}
             onPickChoice={this.onPickChoice}
+            socket={this.props.socket}
           />
         </div>
 

@@ -8,7 +8,8 @@ class Hand extends React.Component {
     this.state = {
       pick: null,
       hand: null,
-      index: 0
+      index: 0,
+      isDealer: false
     };
     this.updateIndex = this.updateIndex.bind(this);
     this.handleCaptionChoice = this.handleCaptionChoice.bind(this);
@@ -20,17 +21,20 @@ class Hand extends React.Component {
         this.setState({ hand: user.hand });
       }
     });
+
+    if (this.props.username === this.props.game.dealer) {
+      this.setState({ isDealer: true });
+    }
   }
 
   handleCaptionChoice() {
-    console.log('handle caption');
     const bottomTextIndex = this.state.hand[this.state.index];
     const choice = {
       username: this.props.username,
       choice: bottomText[bottomTextIndex],
       rating: 0
     };
-    this.props.onPickChoice(choice);
+    this.props.socket.emit('pickChoice', choice);
   }
 
   updateIndex(numDirection) {
@@ -50,7 +54,6 @@ class Hand extends React.Component {
     if (this.props.game) {
       return (
         <div>
-          <p>Pick a caption...</p>
           <div className="toggle">
             <div
               className="zero-margin"
