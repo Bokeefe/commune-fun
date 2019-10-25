@@ -70,11 +70,11 @@ p {
 
 .header {
   display: flex;
-  max-height: 20vh;
+  /* max-height: 20vh; */
 }
 
 .game-container {
-  max-height: 60vh;
+  /* max-height: 60vh; */
   text-align: center;
   overflow: scroll;
 }

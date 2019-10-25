@@ -4,6 +4,14 @@
 }
 
 .btn-nav {
-  font-size: 4rem;
-  height: 100%;
+  font-size: 2rem;
+}
+
+.zero-margin {
+  margin: 0;
+}
+
+.btn-small {
+  padding: 2rem;
+  border-radius: 15%;
 }

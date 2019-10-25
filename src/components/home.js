@@ -6,7 +6,7 @@ export class Home extends React.Component {
     username: '',
     rooms: [],
     pickedRoom: '',
-    connected: false
+    connected: true
   };
 
   constructor(props) {
@@ -20,6 +20,9 @@ export class Home extends React.Component {
   componentDidMount() {
     if (this.props.socket) {
       this.socketListeners();
+    } else {
+      console.log('mo socket home');
+      this.props.restartSocket();
     }
   }
 
@@ -40,6 +43,7 @@ export class Home extends React.Component {
   }
 
   socketListeners() {
+    this.props.socket.emit('getRooms');
     this.props.socket.on('rooms', rooms => {
       /* eslint-disable */
       for (const key in rooms) {

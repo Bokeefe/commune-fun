@@ -12,20 +12,24 @@ import Home from './components/home';
 import Room from './components/room';
 
 class App extends React.Component {
-  state = {
-    username: '',
-    socket: null
-  };
+  constructor() {
+    super();
+    this.state = {
+      username: '',
+      socket: null
+    };
+    this.initSocket.bind = this.initSocket.bind(this);
+  }
 
-  componentDidMount() {
+  componentWillMount() {
     this.initSocket();
   }
 
   initSocket() {
+    this.setState({ socket: null });
     const socket = window.location.href.startsWith('http://localhost')
       ? io('localhost:8080')
       : io();
-
     this.setState({ socket });
   }
 
@@ -52,7 +56,11 @@ class App extends React.Component {
             <Route
               path="/"
               component={() => (
-                <Home parentCallback={this.navigateToRoom} socket={this.state.socket} />
+                <Home
+                  parentCallback={this.navigateToRoom}
+                  socket={this.state.socket}
+                  restartSocket={this.initSocket}
+                />
               )}
             />{' '}
           </Switch>{' '}

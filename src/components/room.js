@@ -67,7 +67,6 @@ class Room extends React.Component {
   }
 
   onPickChoice = choice => {
-    console.log('great news', choice);
     this.props.socket.emit('pickChoice', choice);
   };
 
@@ -89,8 +88,13 @@ class Room extends React.Component {
 
   socketListeners() {
     if (!this.props.socket) {
+      console.log('socket lost at home');
       history.push('/');
     } else {
+      this.props.socket.on('endGame', () => {
+        console.log('game ended');
+      });
+
       this.props.socket.on('message', message => {
         this.appendMessage(message.username, message.text);
       });

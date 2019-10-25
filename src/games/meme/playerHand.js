@@ -23,6 +23,7 @@ class Hand extends React.Component {
   }
 
   handleCaptionChoice() {
+    console.log('handle caption');
     const bottomTextIndex = this.state.hand[this.state.index];
     const choice = {
       username: this.props.username,
@@ -52,6 +53,7 @@ class Hand extends React.Component {
           <p>Pick a caption...</p>
           <div className="toggle">
             <div
+              className="zero-margin"
               onClick={() => {
                 this.updateIndex(-1);
               }}
@@ -62,8 +64,12 @@ class Hand extends React.Component {
             </div>
             <div className="quote">
               <p>{this.state.hand ? bottomText[this.state.hand[this.state.index]].quote : null}</p>
+              <button className="btn-small" onClick={this.handleCaptionChoice}>
+                PICK THIS CAPTION
+              </button>
             </div>
             <div
+              className="zero-margin"
               onClick={() => {
                 this.updateIndex(1);
               }}
@@ -73,8 +79,6 @@ class Hand extends React.Component {
               </span>
             </div>
           </div>
-
-          <button onClick={this.handleCaptionChoice}>PICK CAPTION</button>
         </div>
       );
     } else {

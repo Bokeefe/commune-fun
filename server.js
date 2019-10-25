@@ -58,10 +58,9 @@ io.on('connection', socket => {
         if (!rooms[req.room]) {
           rooms[req.room] = {
             users: [req.username],
-            game: { active: false, users: [], choices: [] }
+            game: { active: false, users: [], choices: [], isFinished: false }
           };
           rooms[req.room].game.users.push({ username: req.username, hand: null });
-          io.emit('rooms', rooms);
           io.to(req.room).emit('updateRoom', rooms[req.room]);
 
           // existing room + new user
@@ -82,10 +81,25 @@ io.on('connection', socket => {
 
     // listeners in room
     socket.on('pickChoice', choice => {
-      rooms[req.room].game.choices.push(choice);
-      console.log(rooms[req.room].game.choices);
+      const usersThatVoted = [];
+
+      rooms[req.room].game.choices.forEach(choice => {
+        usersThatVoted.push(choice.username);
+      });
+
+      // check if they already voted
+      if (!usersThatVoted.includes(choice.username)) {
+        console.log('getting here?');
+        rooms[req.room].game.choices.push(choice);
+      }
+      console.log(usersThatVoted, rooms[req.room].users, usersThatVoted.includes(choice.username));
+
       io.to(req.room).emit('updateRoom', rooms[req.room]);
     });
+  });
+
+  socket.on('getRooms', () => {
+    io.emit('rooms', rooms);
   });
 
   socket.on('message', function(message) {
