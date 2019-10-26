@@ -99,10 +99,19 @@ io.on('connection', socket => {
 
       // if everyone voted
       if (JSON.stringify(usersThatVoted) === JSON.stringify(rooms[req.room].users)) {
-        console.log('game finished');
         rooms[req.room].game.isFinished = true;
+        rooms[req.room].game.users.forEach(user => {
+          if (rooms[req.room].game.dealer === user.username) {
+            io.to(connectedUsers[socket.id].room).emit('dealerHand', rooms[req.room].game.choices);
+          }
+        });
       }
       io.to(req.room).emit('updateRoom', rooms[req.room]);
+    });
+
+    socket.on('winningPick', winner => {
+      console.log(winner);
+      rooms[req.room].game.winner = winner;
     });
   });
 

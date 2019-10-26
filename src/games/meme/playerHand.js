@@ -34,7 +34,7 @@ class Hand extends React.Component {
       choice: bottomText[bottomTextIndex],
       rating: 0
     };
-    this.props.socket.emit('pickChoice', choice);
+    this.props.handleCaptionChoice(choice);
   }
 
   updateIndex(numDirection) {

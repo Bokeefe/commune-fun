@@ -81,7 +81,7 @@ class Room extends React.Component {
       name: name,
       roomName: this.state.roomName
     };
-    console.log(name);
+
     if (name) {
       this.props.socket.emit('startGame', game);
     }
@@ -118,7 +118,11 @@ class Room extends React.Component {
           </NavLink>
           <div className="font-tiny">
             Welcome to {this.state.roomName}
-            <RoomOrganizer users={this.state.room.users} game={this.state.game} />
+            <RoomOrganizer
+              users={this.state.room.users}
+              game={this.state.game}
+              socket={this.props.socket}
+            />
           </div>
 
           <div onClick={() => this.startGame('cursed')}>

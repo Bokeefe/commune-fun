@@ -2,7 +2,6 @@ import React from 'react';
 import './meme.css';
 import Img from './image';
 import PreGame from '../pregame';
-import Hand from './playerHand';
 import RoleStatus from './roleStatus';
 
 class Meme extends React.Component {
@@ -43,11 +42,7 @@ class Meme extends React.Component {
               game={this.props.game}
               username={this.props.username}
               onPickChoice={this.onPickChoice}
-            />
-            <Hand
-              game={this.props.game}
-              username={this.props.username}
-              onPickChoice={this.onPickChoice}
+              socket={this.props.socket}
             />
           </div>
         ) : (
