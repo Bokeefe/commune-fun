@@ -24,7 +24,6 @@ class Meme extends React.Component {
   }
 
   onPickChoice = choice => {
-    console.log('meme', choice);
     this.props.onPickChoice(choice);
   };
 

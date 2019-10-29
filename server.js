@@ -58,7 +58,7 @@ io.on('connection', socket => {
         if (!rooms[req.room]) {
           rooms[req.room] = {
             users: [req.username],
-            game: { active: false, users: [], choices: [], isFinished: false }
+            game: { active: false, users: [], choices: {}, isFinished: false }
           };
 
           // emit to all sockets that there is a new room
@@ -88,13 +88,13 @@ io.on('connection', socket => {
     socket.on('pickChoice', choice => {
       const usersThatVoted = [];
 
-      rooms[req.room].game.choices.forEach(choice => {
+      Object.keys(rooms[req.room].game.choices).forEach(choice => {
         usersThatVoted.push(choice.username);
       });
 
       // check if they already voted
       if (!usersThatVoted.includes(choice.username)) {
-        rooms[req.room].game.choices.push(choice);
+        rooms[req.room].game.choices[choice.username] = choice;
       }
 
       // if everyone voted
@@ -126,7 +126,7 @@ io.on('connection', socket => {
 
   socket.on('startGame', game => {
     if (!game) {
-      rooms[game.roomName].game = { active: false, users: [], choices: [], isFinished: false };
+      rooms[game.roomName].game = { active: false, users: [], choices: {}, isFinished: false };
     }
     rooms[game.roomName].game.active = true;
     rooms[game.roomName].game.name = game.name;

@@ -89,7 +89,6 @@ class Room extends React.Component {
 
   socketListeners() {
     if (!this.props.socket) {
-      console.log('socket lost at home');
       history.push('/');
     } else {
       this.props.socket.on('endGame', () => {
@@ -101,7 +100,6 @@ class Room extends React.Component {
       });
 
       this.props.socket.on('updateRoom', room => {
-        console.log('update room called: ', room);
         this.setState({ room });
       });
     }
@@ -120,7 +118,7 @@ class Room extends React.Component {
             Welcome to {this.state.roomName}
             <RoomOrganizer
               users={this.state.room.users}
-              game={this.state.game}
+              game={this.state.room.game}
               socket={this.props.socket}
             />
           </div>

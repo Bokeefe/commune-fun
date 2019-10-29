@@ -25,12 +25,9 @@ class RoleStatus extends React.Component {
         isDealer: true
       });
     }
-
-    this.props.game.choices.forEach(choice => console.log(choice.username));
   }
 
   onPickChoice = choice => {
-    console.log('meme', choice, this.props.socket);
     this.props.socket.emit('pickChoice', choice);
   };
 
