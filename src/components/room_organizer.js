@@ -6,6 +6,7 @@ class RoomOrganizer extends React.Component {
     super(props);
     this.checkIfVoted = this.checkIfVoted.bind(this);
   }
+
   componentDidMount() {
     this.props.socket.on('updateRoom', room => {
       this.checkIfVoted();
@@ -14,7 +15,6 @@ class RoomOrganizer extends React.Component {
 
   checkIfVoted(user) {
     if (this.props.game) {
-      // if (user in this.props.game.choice) {
       if (this.props.game.choices !== 'undefined') {
         if (user in this.props.game.choices) {
           return true;
@@ -22,7 +22,6 @@ class RoomOrganizer extends React.Component {
           return false;
         }
       }
-      // }
     } else {
       return false;
     }

@@ -27,7 +27,7 @@ class Hand extends React.Component {
     }
   }
 
-  handleCaptionChoice() {
+  handleCaptionChoice = () => {
     const bottomTextIndex = this.state.hand[this.state.index];
     const choice = {
       username: this.props.username,
@@ -35,7 +35,7 @@ class Hand extends React.Component {
       rating: 0
     };
     this.props.handleCaptionChoice(choice);
-  }
+  };
 
   updateIndex(numDirection) {
     const newIndex = this.state.index + numDirection;

@@ -1,0 +1,10 @@
+{
+  "cursed": {
+    "title": "Cursed Images",
+    "desc": "Pair the wretched image with random captions"
+  },
+  "blessed": {
+    "title": "Blessed Images",
+    "desc": "Pair the wholesome image with random captions"
+  }
+}

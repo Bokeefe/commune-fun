@@ -1,8 +1,8 @@
 import React from 'react';
 import './meme.css';
 import Img from './image';
-import PreGame from '../pregame';
-import RoleStatus from './roleStatus';
+import Hand from './playerHand';
+var bottomText = require('./bottom_text.json');
 
 class Meme extends React.Component {
   constructor(props) {
@@ -14,21 +14,16 @@ class Meme extends React.Component {
 
     this.content = this.content.bind(this);
     this.onPickChoice = this.onPickChoice.bind(this);
-    this.startGame = this.startGame.bind(this);
   }
 
   componentDidMount() {
     setTimeout(() => {
       this.setState({ loaded: true, game: this.props.game });
-    }, 1500);
+    }, 500);
   }
 
   onPickChoice = choice => {
-    this.props.onPickChoice(choice);
-  };
-
-  startGame = name => {
-    this.props.startGame(name);
+    this.props.socket.emit('pickChoice', choice);
   };
 
   content() {
@@ -37,34 +32,20 @@ class Meme extends React.Component {
         {this.props.game.active ? (
           <div>
             <Img game={this.props.game} />
-            <RoleStatus
+            <Hand
               game={this.props.game}
               username={this.props.username}
-              onPickChoice={this.onPickChoice}
+              handleCaptionChoice={this.onPickChoice}
               socket={this.props.socket}
             />
           </div>
-        ) : (
-          <PreGame game={this.state.game} startGame={this.startGame} />
-        )}
+        ) : null}
       </div>
     );
   }
 
   render() {
-    return (
-      <div>
-        {this.state.loaded ? (
-          this.content()
-        ) : (
-          <h1 className="loader">
-            <span role="img" aria-label="loader">
-              ⚰️
-            </span>
-          </h1>
-        )}
-      </div>
-    );
+    return <div>{this.state.loaded ? this.content() : null}</div>;
   }
 }
 

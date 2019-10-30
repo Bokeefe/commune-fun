@@ -4,6 +4,8 @@ import { NavLink } from 'react-router-dom';
 import Chat from './chat';
 import RoomOrganizer from './room_organizer';
 import Meme from '../games/meme/meme';
+import RoleStatus from '../games/meme/roleStatus';
+import GamePicker from './gamePicker';
 
 class Room extends React.Component {
   constructor(props) {
@@ -19,6 +21,7 @@ class Room extends React.Component {
     };
     this.sendMsg.bind(this);
     this.onPickChoice.bind(this);
+    this.startGame.bind(this);
   }
 
   componentDidMount() {
@@ -121,6 +124,12 @@ class Room extends React.Component {
               game={this.state.room.game}
               socket={this.props.socket}
             />
+            <RoleStatus
+              game={this.props.game}
+              username={this.props.username}
+              onPickChoice={this.onPickChoice}
+              socket={this.props.socket}
+            />
           </div>
 
           <div onClick={() => this.startGame('cursed')}>
@@ -138,14 +147,7 @@ class Room extends React.Component {
             onPickChoice={this.onPickChoice}
             socket={this.props.socket}
           />
-        </div>
-
-        <div className="chat-container">
-          <Chat
-            username={this.state.username}
-            messages={this.state.messages}
-            onSendMsg={this.sendMsg}
-          />
+          <GamePicker game={this.state.room.game} startGame={this.startGame} />
         </div>
       </div>
     );

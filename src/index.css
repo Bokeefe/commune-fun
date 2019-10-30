@@ -51,6 +51,7 @@
     transform: rotate(360deg);
   }
 }
+
 body {
   background-color: #000000;
   color: #ffffff;
@@ -59,6 +60,7 @@ body {
 p {
   margin: 0;
 }
+
 .btn-home {
   font-size: 2rem;
   padding: 1rem;
@@ -87,6 +89,7 @@ a:-webkit-any-link {
   color: black;
   text-decoration: none;
 }
+
 .loader {
   font-size: 5rem;
   text-align: center;

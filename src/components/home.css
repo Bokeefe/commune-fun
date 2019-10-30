@@ -24,7 +24,8 @@ option {
   font-family: 'GreenFuz';
   font-size: 1.75rem;
   background-color: rgba(73, 73, 73, 0.5);
-  border: 2px solid black;
+  border-radius: 100px;
+  border: 1px solid #c7c3c3;
   color: white;
   padding-left: 1rem;
   margin: 0.5rem;

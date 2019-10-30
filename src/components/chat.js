@@ -23,6 +23,16 @@ export class Chat extends React.Component {
     this.setState({ message: '' });
   };
 
+  /* EXAMPLE USE
+      <div className="chat-container">
+        <Chat
+          username={this.state.username}
+          messages={this.state.messages}
+          onSendMsg={this.sendMsg}
+        />
+      </div>
+      */
+
   render() {
     return (
       <div className="msg-container">

@@ -65,7 +65,7 @@ export class Home extends React.Component {
   render() {
     return (
       <div className="home">
-        <h1 className="blinker">NIGHTMARE UPLOAD</h1>
+        <h1 className="blinker">Commmune Games</h1>
 
         <form>
           <select onChange={this.onPickRoom}>
