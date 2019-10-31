@@ -1,21 +1,19 @@
 import React from 'react';
-
-class RoleStatus extends React.Component {
+import './status.css';
+class Status extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      statusMsg: `test refactor`,
-      isDealer: false
-    };
   }
 
   render() {
     return (
       <div>
-        <p>{this.state.statusMsg}</p>
+        <div className="status-container">
+          <p className="status">{this.props.statusMsg}</p>
+        </div>
       </div>
     );
   }
 }
 
-export default RoleStatus;
+export default Status;

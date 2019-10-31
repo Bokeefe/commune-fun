@@ -2,7 +2,6 @@ import React from 'react';
 import './meme.css';
 import Img from './image';
 import Hand from './playerHand';
-var bottomText = require('./bottom_text.json');
 
 class Meme extends React.Component {
   constructor(props) {

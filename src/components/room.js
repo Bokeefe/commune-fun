@@ -1,11 +1,11 @@
 import React from 'react';
 import history from '../history';
 import { NavLink } from 'react-router-dom';
-import Chat from './chat';
 import RoomOrganizer from './room_organizer';
 import Meme from '../games/meme/meme';
 import RoleStatus from '../games/meme/roleStatus';
 import GamePicker from './gamePicker';
+import Status from '../games/meme/roleStatus';
 
 class Room extends React.Component {
   constructor(props) {
@@ -105,6 +105,10 @@ class Room extends React.Component {
       this.props.socket.on('updateRoom', room => {
         this.setState({ room });
       });
+
+      this.props.socket.on('updateStatus', status => {
+        this.setState({ statusMsg: status, statusKey: Math.floor(Math.random() * 1000) });
+      });
     }
   }
 
@@ -117,17 +121,11 @@ class Room extends React.Component {
               🏚️
             </span>
           </NavLink>
-          <div className="font-tiny">
+          <div>
             Welcome to {this.state.roomName}
             <RoomOrganizer
               users={this.state.room.users}
               game={this.state.room.game}
-              socket={this.props.socket}
-            />
-            <RoleStatus
-              game={this.props.game}
-              username={this.props.username}
-              onPickChoice={this.onPickChoice}
               socket={this.props.socket}
             />
           </div>
@@ -137,7 +135,10 @@ class Room extends React.Component {
               🔄
             </span>
           </div>
+          <hr />
         </div>
+
+        <Status statusMsg={this.state.statusMsg} key={this.state.statusKey} />
 
         <div className="game-container">
           <Meme

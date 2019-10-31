@@ -45,7 +45,6 @@ export class Home extends React.Component {
   socketListeners() {
     this.props.socket.on('rooms', rooms => {
       this.setState({ rooms: [] });
-      console.log('rooms called', rooms);
       /* eslint-disable */
       for (const key in rooms) {
         if (this.state.rooms.indexOf(key) === -1) {

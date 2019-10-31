@@ -1,11 +1,11 @@
 .game-tile {
   max-width: 45%;
-  height: 10rem;
+  height: 50vh;
   border: 1px solid #ffffff;
   border-radius: 10px;
   margin: 1rem;
   margin: 0;
-  background-position: center center;
+  background-position: bottom;
   background-repeat: no-repeat;
 }
 
@@ -19,5 +19,4 @@
   border-radius: 10px;
   height: 100%;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
 }

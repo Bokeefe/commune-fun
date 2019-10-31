@@ -42,11 +42,8 @@ export class GamePicker extends React.Component {
   };
 
   render() {
-    console.log(this.props.game, this.checkIfGameIsActive());
     return this.checkIfGameIsActive() ? null : (
       <div>
-        <h3>Once everyone has joined, someone pick a game and start</h3>
-
         <div className="gameTiles">
           {this.state.games.map(game => (
             <GameTiles name={game} key={game} onPickGame={this.onPickGame} />

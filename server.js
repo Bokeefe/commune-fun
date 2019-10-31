@@ -66,6 +66,10 @@ io.on('connection', socket => {
 
           rooms[req.room].game.users.push({ username: req.username, hand: null });
           io.to(req.room).emit('updateRoom', rooms[req.room]);
+          io.to(req.room).emit(
+            'updateStatus',
+            'You are the 1st. once everyone has joined the room, pick a game to start'
+          );
 
           // existing room + new user
         } else {
@@ -74,6 +78,10 @@ io.on('connection', socket => {
 
           // emit to the room that there is a new user
           io.to(req.room).emit('updateRoom', rooms[req.room]);
+          io.to(req.room).emit(
+            'updateStatus',
+            'Once everyone has joined the room, pick a game to start'
+          );
         }
         callback(rooms[req.room]);
       }
@@ -87,6 +95,7 @@ io.on('connection', socket => {
     // listeners in room
     socket.on('pickChoice', choice => {
       const usersThatVoted = [];
+      io.to(req.room).emit('updateStatus', 'Usernames turn gold when they have voted');
 
       Object.keys(rooms[req.room].game.choices).forEach(choice => {
         usersThatVoted.push(choice.username);
@@ -103,6 +112,10 @@ io.on('connection', socket => {
         rooms[req.room].game.users.forEach(user => {
           if (rooms[req.room].game.dealer === user.username) {
             io.to(connectedUsers[socket.id].room).emit('dealerHand', rooms[req.room].game.choices);
+            io.to(req.room).emit(
+              'updateStatus',
+              'Everyone has voted, waiting for the dealers choice'
+            );
           }
         });
       }
@@ -110,7 +123,8 @@ io.on('connection', socket => {
     });
 
     socket.on('winningPick', winner => {
-      console.log(winner);
+      io.to(req.room).emit('updateStatus', `${winner} has won`);
+
       rooms[req.room].game.winner = winner;
     });
   });
@@ -143,7 +157,7 @@ io.on('connection', socket => {
       user.voted = false;
       index++;
     }
-
+    io.to(game.roomName).emit('updateStatus', 'Pick a caption');
     // emit to room that there is now a game
     io.to(game.roomName).emit('updateRoom', rooms[game.roomName]);
   });

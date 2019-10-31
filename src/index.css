@@ -19,6 +19,12 @@
   font-family: 'Gushing';
   src: local('Gushing'), url('../src/fonts/GushingMeadow.ttf') format('truetype');
 }
+
+@font-face {
+  font-family: 'Roboto';
+  src: local('Roboto'), url('../src/fonts/Roboto-Thin.ttf') format('truetype');
+}
+
 @-ms-keyframes spin {
   from {
     -ms-transform: rotate(0deg);
@@ -55,6 +61,7 @@
 body {
   background-color: #000000;
   color: #ffffff;
+  font-family: 'Roboto';
 }
 
 p {
