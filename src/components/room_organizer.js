@@ -29,8 +29,8 @@ class RoomOrganizer extends React.Component {
 
   render() {
     return this.props.users.length ? (
-      <div>
-        <div className="font-tiny">souls haunting this room:</div>
+      <div className="font-tiny">
+        <div>souls haunting this room ({this.props.roomName}):</div>
         <div className="user-container">
           {this.props.users.map(user => (
             <p value={user} key={user} className={this.checkIfVoted(user) ? 'voted' : null}>

@@ -121,14 +121,13 @@ class Room extends React.Component {
               🏚️
             </span>
           </NavLink>
-          <div>
-            Welcome to {this.state.roomName}
-            <RoomOrganizer
-              users={this.state.room.users}
-              game={this.state.room.game}
-              socket={this.props.socket}
-            />
-          </div>
+
+          <RoomOrganizer
+            roomName={this.state.roomName}
+            users={this.state.room.users}
+            game={this.state.room.game}
+            socket={this.props.socket}
+          />
 
           <div onClick={() => this.startGame('cursed')}>
             <span role="img" aria-label="home icon" className="btn-home">
