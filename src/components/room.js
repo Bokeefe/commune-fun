@@ -5,7 +5,6 @@ import RoomOrganizer from './room_organizer';
 import Meme from '../games/meme/meme';
 import GamePicker from './gamePicker';
 import Status from '../games/meme/roleStatus';
-import Chat from './chat';
 
 class Room extends React.Component {
   constructor(props) {
@@ -144,14 +143,6 @@ class Room extends React.Component {
             socket={this.props.socket}
           />
           <GamePicker game={this.state.room.game} startGame={this.startGame} />
-        </div>
-
-        <div className="chat-container">
-          <Chat
-            username={this.state.username}
-            messages={this.state.messages}
-            onSendMsg={this.sendMsg}
-          />
         </div>
       </div>
     );
