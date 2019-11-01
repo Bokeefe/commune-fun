@@ -1,10 +1,16 @@
+.btn-nav {
+  font-size: 2rem;
+}
+.btn-small {
+  margin: 1rem 0;
+}
+.quote {
+  padding: 1rem;
+}
+
 .toggle {
   display: flex;
   width: 100%;
-}
-
-.btn-nav {
-  font-size: 2rem;
 }
 
 .zero-margin {

@@ -2,39 +2,31 @@ import React from 'react';
 import './hand.css';
 const bottomText = require('./bottom_text.json');
 
-class Hand extends React.Component {
+class DealerHand extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       pick: null,
       hand: null,
-      index: 0,
-      isDealer: false
+      index: 0
     };
     this.updateIndex = this.updateIndex.bind(this);
-    this.handleCaptionChoice = this.handleCaptionChoice.bind(this);
+    this.handleWinningChoice = this.handleWinningChoice.bind(this);
   }
 
   componentDidMount() {
-    this.props.game.users.forEach(user => {
-      if (user.username === this.props.username) {
-        this.setState({ hand: user.hand });
-      }
-    });
-
-    if (this.props.username === this.props.game.dealer) {
-      this.setState({ isDealer: true });
-    }
+    this.setState({ hand: this.props.hand });
   }
 
-  handleCaptionChoice = () => {
+  handleWinningChoice = () => {
     const bottomTextIndex = this.state.hand[this.state.index];
     const choice = {
       username: this.props.username,
       choice: bottomTextIndex,
       rating: 0
     };
-    this.props.handleCaptionChoice(choice);
+
+    this.props.handleWinningChoice(choice);
   };
 
   updateIndex(numDirection) {
@@ -51,7 +43,7 @@ class Hand extends React.Component {
   }
 
   render() {
-    if (this.props.game) {
+    if (this.props.hand) {
       return (
         <div>
           <div className="toggle">
@@ -67,8 +59,8 @@ class Hand extends React.Component {
             </div>
             <div className="quote">
               <p>{this.state.hand ? bottomText[this.state.hand[this.state.index]].quote : null}</p>
-              <button className="btn-small" onClick={this.handleCaptionChoice}>
-                PICK THIS CAPTION
+              <button className="btn-small" onClick={this.handleWinningChoice}>
+                PICK THE WINNING CAPTION
               </button>
             </div>
             <div
@@ -89,5 +81,4 @@ class Hand extends React.Component {
     }
   }
 }
-
-export default Hand;
+export default DealerHand;

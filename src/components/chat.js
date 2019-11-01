@@ -36,7 +36,7 @@ export class Chat extends React.Component {
   render() {
     return (
       <div className="msg-container">
-        <div className="messages">
+        {/* <div className="messages">
           {this.props.messages.map(function(item, index) {
             return (
               <div key={index}>
@@ -46,7 +46,7 @@ export class Chat extends React.Component {
               </div>
             );
           })}
-        </div>
+        </div> */}
         <div>
           <input
             id="message"
@@ -54,6 +54,7 @@ export class Chat extends React.Component {
             onKeyUp={this.handleChatMessage}
             placeholder={`Chat here as ${this.props.username}`}
           />
+
           <button type="button" onClick={this.sendMsg}>
             chat
           </button>

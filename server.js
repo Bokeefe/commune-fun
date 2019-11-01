@@ -68,7 +68,7 @@ io.on('connection', socket => {
           io.to(req.room).emit('updateRoom', rooms[req.room]);
           io.to(req.room).emit(
             'updateStatus',
-            'You are the 1st. once everyone has joined the room, pick a game to start'
+            'You are the 1st in this room. Once everyone has else has joined, pick a game to start'
           );
 
           // existing room + new user
@@ -97,8 +97,11 @@ io.on('connection', socket => {
       const usersThatVoted = [];
       io.to(req.room).emit('updateStatus', 'Usernames turn gold when they have voted');
 
+      // create local array of users that have voted
       Object.keys(rooms[req.room].game.choices).forEach(choice => {
-        usersThatVoted.push(choice.username);
+        if (!usersThatVoted.includes(choice)) {
+          usersThatVoted.push(choice);
+        }
       });
 
       // check if they already voted
@@ -106,15 +109,28 @@ io.on('connection', socket => {
         rooms[req.room].game.choices[choice.username] = choice;
       }
 
+      Object.keys(rooms[req.room].game.choices).forEach(choice => {
+        if (!usersThatVoted.includes(choice)) {
+          usersThatVoted.push(choice);
+        }
+      });
+
       // if everyone voted
-      if (JSON.stringify(usersThatVoted) === JSON.stringify(rooms[req.room].users)) {
+      if (usersThatVoted.length === rooms[req.room].users.length) {
         rooms[req.room].game.isFinished = true;
         rooms[req.room].game.users.forEach(user => {
+          let dealerHand = [];
+
           if (rooms[req.room].game.dealer === user.username) {
-            io.to(connectedUsers[socket.id].room).emit('dealerHand', rooms[req.room].game.choices);
+            Object.keys(rooms[req.room].game.choices).forEach(choice => {
+              dealerHand.push(rooms[req.room].game.choices[choice].choice);
+            });
+
+            io.to(connectedUsers[socket.id].room).emit('dealerHand', dealerHand);
+
             io.to(req.room).emit(
               'updateStatus',
-              'Everyone has voted, waiting for the dealers choice'
+              `Everyone has voted, waiting for the ${rooms[req.room].game.dealer}'s choice`
             );
           }
         });
@@ -123,8 +139,8 @@ io.on('connection', socket => {
     });
 
     socket.on('winningPick', winner => {
-      io.to(req.room).emit('updateStatus', `${winner} has won`);
-
+      console.log('winner');
+      io.to(req.room).emit('winningPick', winner);
       rooms[req.room].game.winner = winner;
     });
   });
@@ -135,7 +151,10 @@ io.on('connection', socket => {
 
   socket.on('message', function(message) {
     message.timestamp = moment().valueOf();
-    io.to(connectedUsers[socket.id].room).emit('message', message);
+    io.to(connectedUsers[socket.id].room).emit(
+      'updateStatus',
+      `${message.username}: ${message.text}`
+    );
   });
 
   socket.on('startGame', game => {
@@ -157,7 +176,14 @@ io.on('connection', socket => {
       user.voted = false;
       index++;
     }
-    io.to(game.roomName).emit('updateStatus', 'Pick a caption');
+
+    io.to(game.roomName).emit(
+      'updateStatus',
+      rooms[game.roomName].game.users.length < 2
+        ? 'Playing by yourself? Pick a caption. You are the dealer too.'
+        : `Pick a caption. ${rooms[game.roomName].game.dealer} will be dealer`
+    );
+
     // emit to room that there is now a game
     io.to(game.roomName).emit('updateRoom', rooms[game.roomName]);
   });
