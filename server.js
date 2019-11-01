@@ -130,7 +130,7 @@ io.on('connection', socket => {
 
             io.to(req.room).emit(
               'updateStatus',
-              `Everyone has voted, waiting for the ${rooms[req.room].game.dealer}'s choice`
+              `Everyone has voted, waiting for ${rooms[req.room].game.dealer}'s choice`
             );
           }
         });

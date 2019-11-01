@@ -63,7 +63,7 @@ class Meme extends React.Component {
         ) : null}
 
         {this.state.winner ? (
-          <h1>
+          <h1 className="winner">
             {bottomText[this.state.winner.choice].quote}{' '}
             {bottomText[this.state.winner.choice].by
               ? ' - ' + bottomText[this.state.winner.choice].by
