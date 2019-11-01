@@ -54,10 +54,6 @@ export class Chat extends React.Component {
             onKeyUp={this.handleChatMessage}
             placeholder={`Chat here as ${this.props.username}`}
           />
-
-          <button type="button" onClick={this.sendMsg}>
-            chat
-          </button>
         </div>
       </div>
     );
