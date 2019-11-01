@@ -21,7 +21,6 @@ export class Home extends React.Component {
     if (this.props.socket) {
       this.socketListeners();
     } else {
-      console.log('mo socket home');
       this.props.restartSocket();
     }
   }

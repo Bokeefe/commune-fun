@@ -139,7 +139,6 @@ io.on('connection', socket => {
     });
 
     socket.on('winningPick', winner => {
-      console.log('winner');
       io.to(req.room).emit('winningPick', winner);
       rooms[req.room].game.winner = winner;
     });
