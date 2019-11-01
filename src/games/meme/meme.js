@@ -39,9 +39,7 @@ class Meme extends React.Component {
 
     this.props.socket.on('dealerHand', dealerHand => this.setState({ dealerHand }));
     this.props.socket.on('winningPick', winningPick => {
-      this.setState({ winner: winningPick }, () => {
-        console.log(this.state.winner);
-      });
+      this.setState({ winner: winningPick });
     });
   }
 

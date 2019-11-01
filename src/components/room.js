@@ -94,10 +94,6 @@ class Room extends React.Component {
     if (!this.props.socket) {
       history.push('/');
     } else {
-      this.props.socket.on('endGame', () => {
-        console.log('game ended');
-      });
-
       this.props.socket.on('message', message => {
         this.appendMessage(message.username, message.text);
       });
