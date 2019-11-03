@@ -199,9 +199,12 @@ io.on('connection', socket => {
       delete connectedUsers[socket.id];
     }
 
+    // delete rooms after they are empty for 10 min
     if (Object.keys(connectedUsers).length < 1) {
-      connectedUsers = {};
-      rooms = {};
+      setTimeout(() => {
+        connectedUsers = {};
+        rooms = {};
+      }, 600000);
     }
   });
 });

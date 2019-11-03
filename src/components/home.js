@@ -17,7 +17,17 @@ export class Home extends React.Component {
     this.onPickRoom = this.onPickRoom.bind(this);
   }
 
+  checkForPrevSession() {
+    if (sessionStorage.getItem('username')) {
+      return sessionStorage.getItem('username');
+    } else {
+      return null;
+    }
+  }
+
   componentDidMount() {
+    sessionStorage.clear();
+
     if (this.props.socket) {
       this.socketListeners();
     } else {
@@ -35,6 +45,8 @@ export class Home extends React.Component {
 
   handleFormSubmit(e) {
     this.props.parentCallback(this.state.pickedRoom, this.state.username);
+    sessionStorage.setItem('username', this.state.username);
+    sessionStorage.setItem('room', this.state.pickedRoom);
   }
 
   onPickRoom(e) {
