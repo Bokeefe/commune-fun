@@ -27,6 +27,7 @@ class Meme extends React.Component {
     }, 500);
 
     this.props.socket.on('updateRoom', room => {
+      console.log(room);
       if (room.game) {
         this.setState({ gameIsActive: room.game.active });
         if (room.game.dealer) {
@@ -43,12 +44,26 @@ class Meme extends React.Component {
     });
   }
 
+  getRoomName() {
+    if (sessionStorage.getItem('roomName')) {
+      return sessionStorage.getItem('roomName');
+    }
+  }
+
   onPickChoice = choice => {
     this.props.socket.emit('pickChoice', choice);
   };
 
   onPickWinner = winner => {
     this.props.socket.emit('winningPick', winner);
+  };
+
+  onPlayAgain = () => {
+    console.log('play Again');
+    this.props.socket.emit('startGame', {
+      name: this.props.game.name,
+      roomName: this.getRoomName()
+    });
   };
 
   content() {
@@ -61,12 +76,15 @@ class Meme extends React.Component {
         ) : null}
 
         {this.state.winner ? (
-          <p className="winner">
-            {bottomText[this.state.winner.choice].quote}{' '}
-            {bottomText[this.state.winner.choice].by
-              ? ' - ' + bottomText[this.state.winner.choice].by
-              : null}
-          </p>
+          <div>
+            <p className="winner">
+              {bottomText[this.state.winner.choice].quote}{' '}
+              {bottomText[this.state.winner.choice].by
+                ? ' - ' + bottomText[this.state.winner.choice].by
+                : null}
+            </p>
+            <button onClick={this.onPlayAgain}>PLAY AGAIN</button>
+          </div>
         ) : (
           <div>
             {this.props.game.active && !this.state.dealerHand ? (

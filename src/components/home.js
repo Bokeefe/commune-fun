@@ -46,7 +46,7 @@ export class Home extends React.Component {
   handleFormSubmit(e) {
     this.props.parentCallback(this.state.pickedRoom, this.state.username);
     sessionStorage.setItem('username', this.state.username);
-    sessionStorage.setItem('room', this.state.pickedRoom);
+    sessionStorage.setItem('roomName', this.state.pickedRoom);
   }
 
   onPickRoom(e) {

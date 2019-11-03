@@ -157,9 +157,11 @@ io.on('connection', socket => {
   });
 
   socket.on('startGame', game => {
+    console.log('start game');
     if (!game) {
       rooms[game.roomName].game = { active: false, users: [], choices: {}, isFinished: false };
     }
+
     rooms[game.roomName].game.active = true;
     rooms[game.roomName].game.name = game.name;
     rooms[game.roomName].game.imgIndex = getRandomArrayIndex(imgDir[game.name]);
@@ -182,7 +184,7 @@ io.on('connection', socket => {
         ? 'Playing by yourself? Pick a caption. You are the dealer too.'
         : `Pick a caption. ${rooms[game.roomName].game.dealer} will be dealer`
     );
-
+    console.log(rooms[game.roomName]);
     // emit to room that there is now a game
     io.to(game.roomName).emit('updateRoom', rooms[game.roomName]);
   });

@@ -39,7 +39,7 @@ class GameTiles extends React.Component {
         <div
           className="game-tile"
           key={this.props.name}
-          style={{ backgroundImage: `url(${this.getRandomImg()})` }}
+          // style={{ backgroundImage: `url(${this.getRandomImg()})` }}
           onClick={() => this.onPickGame(this.props.name)}
         >
           <div className="desc">
