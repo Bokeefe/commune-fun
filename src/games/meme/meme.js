@@ -1,7 +1,7 @@
 import React from 'react';
 import './meme.css';
 import Img from './image';
-import Hand from './playerHand';
+import Hand from './hand';
 import DealerHand from './dealerHand';
 const bottomText = require('./bottom_text.json');
 
@@ -12,7 +12,10 @@ class Meme extends React.Component {
       loaded: false,
       game: { active: false },
       gameIsActive: false,
+      hand: [],
+      handKey: 0,
       isDealer: false,
+      key: 0,
       dealerHand: null,
       winner: null
     };
@@ -27,15 +30,24 @@ class Meme extends React.Component {
     }, 500);
 
     this.props.socket.on('updateRoom', room => {
-      console.log(room);
       if (room.game) {
+        room.game.users.forEach(user => {
+          if (user.username === this.props.username) {
+            if (user.hand !== this.state.hand) {
+              console.log('change hand', user.hand, this.state.hand);
+              this.setState({ hand: user.hand });
+            }
+          }
+        });
         this.setState({ gameIsActive: room.game.active });
+
         if (room.game.dealer) {
           if (room.game.dealer === this.props.username) {
             this.setState({ isDealer: true });
           }
         }
       }
+      this.setState({ handKey: Math.floor(Math.random() * 1000) });
     });
 
     this.props.socket.on('dealerHand', dealerHand => this.setState({ dealerHand }));
@@ -59,7 +71,7 @@ class Meme extends React.Component {
   };
 
   onPlayAgain = () => {
-    console.log('play Again');
+    this.setState({ winner: null });
     this.props.socket.emit('startGame', {
       name: this.props.game.name,
       roomName: this.getRoomName()
@@ -78,7 +90,7 @@ class Meme extends React.Component {
         {this.state.winner ? (
           <div>
             <p className="winner">
-              {bottomText[this.state.winner.choice].quote}{' '}
+              🏆: {bottomText[this.state.winner.choice].quote}
               {bottomText[this.state.winner.choice].by
                 ? ' - ' + bottomText[this.state.winner.choice].by
                 : null}
@@ -89,10 +101,10 @@ class Meme extends React.Component {
           <div>
             {this.props.game.active && !this.state.dealerHand ? (
               <Hand
-                game={this.props.game}
+                hand={this.state.hand}
+                key={this.state.handKey}
                 username={this.props.username}
                 handleCaptionChoice={this.onPickChoice}
-                socket={this.props.socket}
               />
             ) : null}
 

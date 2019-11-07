@@ -19,7 +19,6 @@ class Room extends React.Component {
       }
     };
     this.sendMsg.bind(this);
-    this.onPickChoice.bind(this);
     this.startGame.bind(this);
   }
 
@@ -51,6 +50,13 @@ class Room extends React.Component {
     }
   }
 
+  getRoomStatus() {
+    // console.log('GATHERING', this.state.game === undefined);
+    // console.log('PLAYING', this.state.game === undefined);
+
+    return 'FANCY';
+  }
+
   updateRoom = room => {
     this.setState({ room: room });
   };
@@ -65,10 +71,6 @@ class Room extends React.Component {
       return null;
     }
   }
-
-  onPickChoice = choice => {
-    this.props.socket.emit('pickChoice', choice);
-  };
 
   sendMsg = (username, message) => {
     this.props.socket.emit('message', {
@@ -123,13 +125,6 @@ class Room extends React.Component {
             game={this.state.room.game}
             socket={this.props.socket}
           />
-
-          <div onClick={() => this.startGame('cursed')}>
-            <span role="img" aria-label="home icon" className="btn-home">
-              🔄
-            </span>
-          </div>
-          <hr />
         </div>
 
         <Status statusMsg={this.state.statusMsg} key={this.state.statusKey} />
@@ -139,8 +134,8 @@ class Room extends React.Component {
             game={this.state.room.game}
             startGame={this.startGame}
             username={this.state.username}
-            onPickChoice={this.onPickChoice}
             socket={this.props.socket}
+            status={this.getRoomStatus()}
           />
           <GamePicker game={this.state.room.game} startGame={this.startGame} />
         </div>

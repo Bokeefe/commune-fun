@@ -158,16 +158,28 @@ io.on('connection', socket => {
 
   socket.on('startGame', game => {
     console.log('start game');
-    if (!game) {
-      rooms[game.roomName].game = { active: false, users: [], choices: {}, isFinished: false };
-    }
 
-    rooms[game.roomName].game.active = true;
-    rooms[game.roomName].game.name = game.name;
-    rooms[game.roomName].game.imgIndex = getRandomArrayIndex(imgDir[game.name]);
+    rooms[game.roomName].game = {
+      active: true,
+      choices: {},
+      dealerHand: [],
+      imgIndex: getRandomArrayIndex(imgDir[game.name]),
+      isFinished: false,
+      name: game.name,
+      users: [],
+      winner: ''
+    };
+
+    // create an Obj for each user to recieve hands
+    rooms[game.roomName].users.forEach(user =>
+      rooms[game.roomName].game.users.push({ username: user, hand: null })
+    );
+
+    // pich a random user to be dealer
     const randomDealer = getRandomArrayIndex(rooms[game.roomName].users);
     rooms[game.roomName].game.dealer = rooms[game.roomName].users[randomDealer];
 
+    // deal 7 unique captions to each user
     var quoteIndexArr = getArrayOfIndexes(bottomText);
     quoteIndexArr = suffleArray(quoteIndexArr);
     const dealerDeck = deal(quoteIndexArr, 7, rooms[game.roomName].game.users.length);
@@ -184,7 +196,7 @@ io.on('connection', socket => {
         ? 'Playing by yourself? Pick a caption. You are the dealer too.'
         : `Pick a caption. ${rooms[game.roomName].game.dealer} will be dealer`
     );
-    console.log(rooms[game.roomName]);
+
     // emit to room that there is now a game
     io.to(game.roomName).emit('updateRoom', rooms[game.roomName]);
   });
