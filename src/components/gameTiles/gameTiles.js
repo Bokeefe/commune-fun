@@ -13,6 +13,10 @@ class GameTiles extends React.Component {
         blessed: {
           title: 'Blessed Images',
           desc: 'Pair the wholesome image with random captions'
+        },
+        medieval: {
+          title: 'Medieval Times',
+          desc: 'Pair the medieval painting with a meme caption from our modern dystopia'
         }
       },
       pickedGame: ''

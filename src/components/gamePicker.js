@@ -6,7 +6,7 @@ export class GamePicker extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      games: ['blessed', 'cursed'],
+      games: ['blessed', 'cursed', 'medieval'],
       pickedGame: ''
     };
 
