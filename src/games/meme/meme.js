@@ -34,8 +34,8 @@ class Meme extends React.Component {
         room.game.users.forEach(user => {
           if (user.username === this.props.username) {
             if (user.hand !== this.state.hand) {
-              console.log('change hand', user.hand, this.state.hand);
               this.setState({ hand: user.hand });
+              console.log('new hand? ', this.state.hand);
             }
           }
         });
