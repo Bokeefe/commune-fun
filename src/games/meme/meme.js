@@ -3,6 +3,7 @@ import './meme.css';
 import Img from './image';
 import Hand from './hand';
 import DealerHand from './dealerHand';
+
 const bottomText = require('./bottom_text.json');
 
 class Meme extends React.Component {
@@ -11,7 +12,7 @@ class Meme extends React.Component {
     this.state = {
       loaded: false,
       game: { active: false },
-      gameIsActive: false,
+      gameStatus: 'INACTIVE',
       hand: [],
       handKey: 0,
       isDealer: false,
@@ -21,6 +22,7 @@ class Meme extends React.Component {
     };
 
     this.content = this.content.bind(this);
+    this.initIoListeners = this.initIoListeners.bind(this);
     this.onPickChoice = this.onPickChoice.bind(this);
   }
 
@@ -28,18 +30,38 @@ class Meme extends React.Component {
     setTimeout(() => {
       this.setState({ loaded: true, game: this.props.game });
     }, 500);
+    this.initIoListeners();
+  }
 
+  getGameStatus(game) {
+    if (game.active && game.isFinished && !!game.winner) {
+      return 'FINISHED';
+    } else if (game.active && game.isFinished && !game.winner) {
+      return 'VOTED';
+    } else if (game.active && !game.isFinished && !game.winner) {
+      return 'PLAYING';
+    } else if (!game.active && !game.isFinished && !game.winner) {
+      return 'INACTIVE';
+    }
+  }
+
+  getRoomName() {
+    if (sessionStorage.getItem('roomName')) {
+      return sessionStorage.getItem('roomName');
+    }
+  }
+
+  initIoListeners() {
     this.props.socket.on('updateRoom', room => {
       if (room.game) {
         room.game.users.forEach(user => {
           if (user.username === this.props.username) {
             if (user.hand !== this.state.hand) {
               this.setState({ hand: user.hand });
-              console.log('new hand? ', this.state.hand);
+              sessionStorage.setItem('room', JSON.stringify(room));
             }
           }
         });
-        this.setState({ gameIsActive: room.game.active });
 
         if (room.game.dealer) {
           if (room.game.dealer === this.props.username) {
@@ -47,19 +69,20 @@ class Meme extends React.Component {
           }
         }
       }
-      this.setState({ handKey: Math.floor(Math.random() * 1000) });
+
+      this.setState({
+        handKey: Math.floor(Math.random() * 1000),
+        gameStatus: this.getGameStatus(room.game)
+      });
     });
 
-    this.props.socket.on('dealerHand', dealerHand => this.setState({ dealerHand }));
+    this.props.socket.on('dealerHand', dealerHand => {
+      this.setState({ dealerHand });
+    });
+
     this.props.socket.on('winningPick', winningPick => {
       this.setState({ winner: winningPick });
     });
-  }
-
-  getRoomName() {
-    if (sessionStorage.getItem('roomName')) {
-      return sessionStorage.getItem('roomName');
-    }
   }
 
   onPickChoice = choice => {
@@ -87,32 +110,42 @@ class Meme extends React.Component {
           </div>
         ) : null}
 
+        <div>
+          {this.state.hand ? (
+            <Hand
+              gameStatus={this.state.gameStatus}
+              hand={this.state.hand}
+              key={this.state.handKey}
+              socket={this.props.socket}
+              username={this.props.username}
+              handleCaptionChoice={this.onPickChoice}
+            />
+          ) : null}
+          {this.state.isDealer ? (
+            <DealerHand
+              gameStatus={this.state.gameStatus}
+              hand={this.state.dealerHand}
+              key={this.state.handKey + 1}
+              username={this.props.username}
+              handleWinningChoice={this.onPickWinner}
+            />
+          ) : null}
+        </div>
+
         {this.state.winner ? (
           <div>
             <p className="winner">
-              🏆: {bottomText[this.state.winner.choice].quote}
+              <span role="img" aria-label="winner trophy">
+                🏆
+              </span>
+              : {bottomText[this.state.winner.choice].quote}
               {bottomText[this.state.winner.choice].by
                 ? ' - ' + bottomText[this.state.winner.choice].by
                 : null}
             </p>
             <button onClick={this.onPlayAgain}>PLAY AGAIN</button>
           </div>
-        ) : (
-          <div>
-            {this.props.game.active && !this.state.dealerHand ? (
-              <Hand
-                hand={this.state.hand}
-                key={this.state.handKey}
-                username={this.props.username}
-                handleCaptionChoice={this.onPickChoice}
-              />
-            ) : null}
-
-            {this.state.dealerHand ? (
-              <DealerHand hand={this.state.dealerHand} handleWinningChoice={this.onPickWinner} />
-            ) : null}
-          </div>
-        )}
+        ) : null}
       </div>
     );
   }

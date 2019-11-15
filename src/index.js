@@ -21,17 +21,17 @@ class App extends React.Component {
     this.initSocket.bind = this.initSocket.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    console.clear();
     this.initSocket();
   }
 
-  initSocket() {
-    this.setState({ socket: null });
+  initSocket = () => {
     const socket = window.location.href.startsWith('http://localhost')
       ? io('localhost:8080')
       : io();
     this.setState({ socket });
-  }
+  };
 
   navigateToRoom = (roomName, username) => {
     this.setState({ roomName: roomName, username: username });

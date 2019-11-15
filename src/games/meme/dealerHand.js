@@ -1,21 +1,27 @@
 import React from 'react';
 import './hand.css';
+
 const bottomText = require('./bottom_text.json');
 
-class DealerHand extends React.Component {
+class dealerHand extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      pick: null,
-      hand: null,
-      index: 0
+      index: 0,
+      hand: [],
+      quote: ''
     };
     this.updateIndex = this.updateIndex.bind(this);
     this.handleWinningChoice = this.handleWinningChoice.bind(this);
   }
 
   componentDidMount() {
-    this.setState({ hand: this.props.hand });
+    if (this.props.hand) {
+      this.setState({
+        hand: this.props.hand,
+        quote: bottomText[this.props.hand[this.state.index]].quote
+      });
+    }
   }
 
   handleWinningChoice = () => {
@@ -25,7 +31,6 @@ class DealerHand extends React.Component {
       choice: bottomTextIndex,
       rating: 0
     };
-
     this.props.handleWinningChoice(choice);
   };
 
@@ -34,16 +39,19 @@ class DealerHand extends React.Component {
 
     this.setState({ index: newIndex });
     if (newIndex > 0 && newIndex < this.state.hand.length) {
-      this.setState({ index: newIndex });
+      this.setState({ index: newIndex, quote: bottomText[this.state.hand[newIndex]].quote });
     } else if (newIndex > 0) {
-      this.setState({ index: 0 });
+      this.setState({ index: 0, quote: bottomText[this.state.hand[0]].quote });
     } else {
-      this.setState({ index: this.state.hand.length - 1 });
+      this.setState({
+        index: this.state.hand.length - 1,
+        quote: bottomText[this.state.hand.length - 1].quote
+      });
     }
   }
 
   render() {
-    if (this.props.hand) {
+    if (this.props.gameStatus === 'VOTED') {
       return (
         <div>
           <div className="toggle">
@@ -58,11 +66,12 @@ class DealerHand extends React.Component {
               </span>
             </div>
             <div className="quote">
-              <p>{this.state.hand ? bottomText[this.state.hand[this.state.index]].quote : null}</p>
+              <p>{this.state.quote}</p>
               <button className="btn-small" onClick={this.handleWinningChoice}>
-                PICK THE WINNING CAPTION
+                PICK WINNER
               </button>
             </div>
+
             <div
               className="zero-margin"
               onClick={() => {
@@ -81,4 +90,5 @@ class DealerHand extends React.Component {
     }
   }
 }
-export default DealerHand;
+
+export default dealerHand;

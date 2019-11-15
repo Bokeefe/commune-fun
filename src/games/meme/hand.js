@@ -1,5 +1,6 @@
 import React from 'react';
 import './hand.css';
+
 const bottomText = require('./bottom_text.json');
 
 class Hand extends React.Component {
@@ -7,23 +8,23 @@ class Hand extends React.Component {
     super(props);
     this.state = {
       index: 0,
-      hand: [0]
+      hand: [],
+      quote: ''
     };
     this.updateIndex = this.updateIndex.bind(this);
     this.handleCaptionChoice = this.handleCaptionChoice.bind(this);
   }
 
   componentDidMount() {
-    this.setState({ hand: this.props.hand }, () =>
-      console.log(bottomText[this.state.hand[this.state.index]].quote)
-    );
-    setInterval(() => {
-      console.log(this.state.hand);
-    }, 3000);
-  }
+    this.setState({ hand: this.props.hand }, () => {
+      this.setState({ quote: bottomText[this.state.hand[this.state.index]].quote });
+    });
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ hand: nextProps.hand });
+    if (this.props.socket) {
+      this.props.socket.on('updateRoom', room => {
+        room.game.users.forEach(user => this.setState({ hand: user.hand }));
+      });
+    }
   }
 
   handleCaptionChoice = () => {
@@ -33,6 +34,7 @@ class Hand extends React.Component {
       choice: bottomTextIndex
     };
     this.props.handleCaptionChoice(choice);
+    this.setState({ hand: null });
   };
 
   updateIndex(numDirection) {
@@ -40,16 +42,19 @@ class Hand extends React.Component {
 
     this.setState({ index: newIndex });
     if (newIndex > 0 && newIndex < this.state.hand.length) {
-      this.setState({ index: newIndex });
+      this.setState({ index: newIndex, quote: bottomText[this.state.hand[newIndex]].quote });
     } else if (newIndex > 0) {
-      this.setState({ index: 0 });
+      this.setState({ index: 0, quote: bottomText[this.state.hand[0]].quote });
     } else {
-      this.setState({ index: this.state.hand.length - 1 });
+      this.setState({
+        index: this.state.hand.length - 1,
+        quote: bottomText[this.state.hand.length - 1].quote
+      });
     }
   }
 
   render() {
-    if (this.state.hand) {
+    if (this.props.gameStatus === 'PLAYING') {
       return (
         <div>
           <div className="toggle">
@@ -64,11 +69,12 @@ class Hand extends React.Component {
               </span>
             </div>
             <div className="quote">
-              <p>{this.state.hand ? bottomText[this.state.hand[this.state.index]].quote : null}</p>
+              <p>{this.state.quote}</p>
               <button className="btn-small" onClick={this.handleCaptionChoice}>
                 PICK THIS CAPTION
               </button>
             </div>
+
             <div
               className="zero-margin"
               onClick={() => {

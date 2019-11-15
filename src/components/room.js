@@ -28,6 +28,7 @@ class Room extends React.Component {
       : history.location.pathname.replace('/', '');
 
     const username = this.props.username ? this.props.username : history.push('/');
+
     this.setState({ username: username, roomName: roomName }, () => {
       this.props.socket.emit(
         'joinRoom',
@@ -48,13 +49,6 @@ class Room extends React.Component {
       const concatMsgs = this.state.messages.concat({ username: username, message: message });
       this.setState({ messages: concatMsgs });
     }
-  }
-
-  getRoomStatus() {
-    // console.log('GATHERING', this.state.game === undefined);
-    // console.log('PLAYING', this.state.game === undefined);
-
-    return 'FANCY';
   }
 
   updateRoom = room => {
@@ -135,7 +129,6 @@ class Room extends React.Component {
             startGame={this.startGame}
             username={this.state.username}
             socket={this.props.socket}
-            status={this.getRoomStatus()}
           />
           <GamePicker game={this.state.room.game} startGame={this.startGame} />
         </div>

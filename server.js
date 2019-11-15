@@ -141,6 +141,7 @@ io.on('connection', socket => {
     socket.on('winningPick', winner => {
       io.to(req.room).emit('winningPick', winner);
       rooms[req.room].game.winner = winner;
+      io.to(req.room).emit('updateRoom', rooms[req.room]);
     });
   });
 
@@ -167,7 +168,7 @@ io.on('connection', socket => {
       isFinished: false,
       name: game.name,
       users: [],
-      winner: ''
+      winner: null
     };
 
     // create an Obj for each user to recieve hands
