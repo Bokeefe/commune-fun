@@ -94,11 +94,21 @@ class Meme extends React.Component {
   };
 
   onPlayAgain = () => {
-    this.setState({ winner: null });
-    this.props.socket.emit('startGame', {
-      name: this.props.game.name,
-      roomName: this.getRoomName()
-    });
+    this.setState(
+      {
+        winner: null,
+        isDealer: false,
+        dealerHand: null,
+        hand: [],
+        gameStatus: 'PLAYING'
+      },
+      () => {
+        this.props.socket.emit('startGame', {
+          name: this.props.game.name,
+          roomName: this.getRoomName()
+        });
+      }
+    );
   };
 
   content() {
