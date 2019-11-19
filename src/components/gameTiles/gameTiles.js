@@ -1,6 +1,9 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBiohazard, faGamepad, faCat, faChessKnight } from '@fortawesome/free-solid-svg-icons';
 
 const memeImgs = require('../../games/meme/meme_img.json');
+
 class GameTiles extends React.Component {
   constructor(props) {
     super(props);
@@ -28,6 +31,19 @@ class GameTiles extends React.Component {
     // this.getRandomImg();
   }
 
+  getGameIcon(gameName) {
+    switch (gameName) {
+      case 'cursed':
+        return faBiohazard;
+      case 'blessed':
+        return faCat;
+      case 'medieval':
+        return faChessKnight;
+      default:
+        return faGamepad;
+    }
+  }
+
   getRandomImg() {
     const randIndex = Math.floor(Math.random() * memeImgs[this.props.name].length);
     return `/imgs/${this.props.name}/${memeImgs[this.props.name][randIndex]}`;
@@ -47,6 +63,7 @@ class GameTiles extends React.Component {
           onClick={() => this.onPickGame(this.props.name)}
         >
           <div className="desc">
+            <FontAwesomeIcon icon={this.getGameIcon(this.props.name)} className="tile-icon" />
             <h3>{this.state.gameData[this.props.name].title}</h3>
             <p>{this.state.gameData[this.props.name].desc}</p>
           </div>

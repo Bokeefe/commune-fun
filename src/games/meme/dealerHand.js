@@ -1,6 +1,7 @@
 import React from 'react';
 import './hand.css';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronCircleRight, faChevronCircleLeft } from '@fortawesome/free-solid-svg-icons';
 const bottomText = require('./bottom_text.json');
 
 class dealerHand extends React.Component {
@@ -62,7 +63,7 @@ class dealerHand extends React.Component {
               }}
             >
               <span role="img" className="btn-nav" aria-label="backward">
-                ◀️
+                <FontAwesomeIcon icon={faChevronCircleLeft} />
               </span>
             </div>
             <div className="quote">
@@ -79,7 +80,7 @@ class dealerHand extends React.Component {
               }}
             >
               <span role="img" className="btn-nav" aria-label="forward">
-                ▶️
+                <FontAwesomeIcon icon={faChevronCircleRight} />
               </span>
             </div>
           </div>

@@ -1,14 +1,17 @@
 .game-tile {
   border: 1px solid #ffffff;
   border-radius: 10px;
+  flex: 1 0 45%;
   margin: 0.5rem;
-  padding: 1rem;
+  padding: 2rem 1rem 1rem 1rem;
+
   background-position: bottom;
   background-repeat: no-repeat;
 }
 
 .gameTiles {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-evenly;
 }
 
@@ -17,4 +20,8 @@
   border-radius: 10px;
   height: 100%;
   width: 100%;
+}
+
+.tile-icon {
+  font-size: 3rem;
 }

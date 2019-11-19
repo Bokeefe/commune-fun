@@ -5,6 +5,8 @@ import RoomOrganizer from './room_organizer';
 import Meme from '../games/meme/meme';
 import GamePicker from './gamePicker';
 import Status from '../games/meme/roleStatus';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome } from '@fortawesome/free-solid-svg-icons';
 
 class Room extends React.Component {
   constructor(props) {
@@ -109,7 +111,7 @@ class Room extends React.Component {
         <div className="header">
           <NavLink to="/">
             <span role="img" aria-label="home icon" className="btn-home">
-              🏚️
+              <FontAwesomeIcon icon={faHome} style={{ color: 'white' }} />
             </span>
           </NavLink>
 
