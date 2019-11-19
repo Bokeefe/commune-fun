@@ -18,6 +18,7 @@ class Meme extends React.Component {
       isDealer: false,
       key: 0,
       dealerHand: null,
+      showDealerHand: false,
       winner: null
     };
 
@@ -68,6 +69,8 @@ class Meme extends React.Component {
             this.setState({ isDealer: true });
           }
         }
+
+        this.setState({ winner: room.game.winner });
       }
 
       this.setState({
@@ -131,7 +134,10 @@ class Meme extends React.Component {
               handleCaptionChoice={this.onPickChoice}
             />
           ) : null}
-          {this.state.isDealer ? (
+
+          {this.state.isDealer &&
+          this.state.winner === null &&
+          this.state.gameStatus === 'VOTED' ? (
             <DealerHand
               gameStatus={this.state.gameStatus}
               hand={this.state.dealerHand}
@@ -143,7 +149,7 @@ class Meme extends React.Component {
         </div>
 
         {this.state.winner ? (
-          <div>
+          <div key={this.state.handKey + 2}>
             <p className="winner">
               <span role="img" aria-label="winner trophy">
                 🏆

@@ -52,43 +52,42 @@ class dealerHand extends React.Component {
   }
 
   render() {
-    if (this.props.gameStatus === 'VOTED') {
-      return (
-        <div>
-          <div className="toggle">
-            <div
-              className="zero-margin"
-              onClick={() => {
-                this.updateIndex(-1);
-              }}
-            >
-              <span role="img" className="btn-nav" aria-label="backward">
-                <FontAwesomeIcon icon={faChevronCircleLeft} />
-              </span>
-            </div>
-            <div className="quote">
-              <p>{this.state.quote}</p>
-              <button className="btn-small" onClick={this.handleWinningChoice}>
-                PICK WINNER
-              </button>
-            </div>
-
-            <div
-              className="zero-margin"
-              onClick={() => {
-                this.updateIndex(1);
-              }}
-            >
-              <span role="img" className="btn-nav" aria-label="forward">
-                <FontAwesomeIcon icon={faChevronCircleRight} />
-              </span>
-            </div>
-          </div>
-        </div>
-      );
-    } else {
+    if (this.props.gameStatus !== 'VOTED') {
       return null;
     }
+    return (
+      <div>
+        <div className="toggle">
+          <div
+            className="zero-margin"
+            onClick={() => {
+              this.updateIndex(-1);
+            }}
+          >
+            <span role="img" className="btn-nav" aria-label="backward">
+              <FontAwesomeIcon icon={faChevronCircleLeft} />
+            </span>
+          </div>
+          <div className="quote">
+            <p>{this.state.quote}</p>
+            <button className="btn-small" onClick={this.handleWinningChoice}>
+              PICK WINNER
+            </button>
+          </div>
+
+          <div
+            className="zero-margin"
+            onClick={() => {
+              this.updateIndex(1);
+            }}
+          >
+            <span role="img" className="btn-nav" aria-label="forward">
+              <FontAwesomeIcon icon={faChevronCircleRight} />
+            </span>
+          </div>
+        </div>
+      </div>
+    );
   }
 }
 
