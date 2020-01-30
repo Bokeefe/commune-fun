@@ -7,7 +7,7 @@ export function getRooms() {
 
   return {
     type: 'GET_ROOM',
-    payload: sessionStorage.getItem('room');
+    payload: sessionStorage.getItem('room')
   };
 }
 

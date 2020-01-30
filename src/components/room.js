@@ -1,9 +1,9 @@
 import React from 'react';
 import history from '../history';
 import { NavLink } from 'react-router-dom';
-import RoomOrganizer from './room_organizer';
+import RoomOrganizer from './roomOrganizer/room_organizer';
 import Meme from '../games/meme/meme';
-import GamePicker from './gamePicker';
+import GamePicker from './gamePicker/gamePicker';
 import Status from '../games/meme/roleStatus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';

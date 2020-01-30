@@ -1,5 +1,5 @@
 import React from 'react';
-import GameTiles from './gameTiles/gameTiles';
+import GameTiles from '../gameTiles/gameTiles';
 import './gamePicker.css';
 
 export class GamePicker extends React.Component {

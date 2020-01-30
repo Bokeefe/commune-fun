@@ -1,6 +1,7 @@
 div {
   margin: 0 auto;
 }
+
 .user-container {
   display: flex;
   justify-content: space-evenly;
@@ -8,4 +9,7 @@ div {
 
 .voted {
   color: gold;
+  font-weight: bold;
+  outline: 1px solid gold;
+  padding:.1rem
 }

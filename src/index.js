@@ -8,7 +8,7 @@ import './index.css';
 import io from 'socket.io-client';
 
 // COMPONENTS
-import Home from './components/home';
+import Home from './components/home/home';
 import Room from './components/room';
 
 class App extends React.Component {
@@ -16,13 +16,15 @@ class App extends React.Component {
     super();
     this.state = {
       username: '',
-      socket: null
+      socket: null,
     };
     this.initSocket.bind = this.initSocket.bind(this);
   }
 
   componentDidMount() {
     console.clear();
+    sessionStorage.removeItem('roomName');
+    if (sessionStorage.getItem('username')) { this.setState({username: sessionStorage.getItem('username')} )}
     this.initSocket();
   }
 
@@ -35,6 +37,9 @@ class App extends React.Component {
 
   navigateToRoom = (roomName, username) => {
     this.setState({ roomName: roomName, username: username });
+    sessionStorage.setItem('roomName', this.state.roomName);
+    sessionStorage.setItem('username', this.state.username);
+
     history.push('/' + roomName);
   };
 
@@ -44,7 +49,7 @@ class App extends React.Component {
         <div>
           <Switch>
             <Route
-              path="/:room"
+              path='/:room'
               component={() => (
                 <Room
                   roomName={this.state.roomName}
@@ -52,9 +57,9 @@ class App extends React.Component {
                   socket={this.state.socket}
                 />
               )}
-            />{' '}
+            />
             <Route
-              path="/"
+              path='/'
               component={() => (
                 <Home
                   parentCallback={this.navigateToRoom}
@@ -62,9 +67,9 @@ class App extends React.Component {
                   restartSocket={this.initSocket}
                 />
               )}
-            />{' '}
-          </Switch>{' '}
-        </div>{' '}
+            />
+          </Switch>
+        </div>
       </Router>
     );
   }

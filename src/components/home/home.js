@@ -3,7 +3,7 @@ import './home.css';
 
 export class Home extends React.Component {
   state = {
-    username: '',
+    username: sessionStorage.getItem('username') ? sessionStorage.getItem('username') : '',
     rooms: [],
     pickedRoom: '',
     connected: true
@@ -26,8 +26,6 @@ export class Home extends React.Component {
   }
 
   componentDidMount() {
-    sessionStorage.clear();
-
     if (this.props.socket) {
       this.socketListeners();
     } else {
@@ -101,8 +99,8 @@ export class Home extends React.Component {
             onChange={this.handleNewRoom}
             placeholder="...or start a New Room Here"
           />
-          <input type="text" onChange={this.handleNewUserName} placeholder="Your Call Sign" />
-          <button type="button" onClick={this.handleFormSubmit}>
+          <input type="text" onChange={this.handleNewUserName} placeholder="Your Call Sign" defaultValue={this.state.username}/>
+          <button type="button" onClick={this.handleFormSubmit} >
             JOIN ROOM
           </button>
         </form>
