@@ -87,6 +87,14 @@ io.on('connection', socket => {
           );
         }
         callback(rooms[req.room]);
+
+        socket.on('checkForUpdates', (roomName) => {
+          io.to(req.room).emit(
+            'updateStatus',
+            'This actually just refreshed'
+          );
+          io.to(req.room).emit('updateRoom', rooms[req.room]);
+        });
       }
     } else {
       callback({
