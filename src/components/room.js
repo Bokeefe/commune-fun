@@ -91,6 +91,11 @@ class Room extends React.Component {
     if (!this.props.socket) {
       history.push('/');
     } else {
+      // checks if the gameObject has changed since being inactive
+      window.addEventListener("focus", () => {
+        this.props.socket.emit('checkForUpdates', this.state.roomName);
+      });
+
       this.props.socket.on('message', message => {
         this.appendMessage(message.username, message.text);
       });

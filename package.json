@@ -22,7 +22,7 @@
     "socket.io-client": "^2.3.0"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "node server/server.js",
     "dev": "concurrently --kill-others \"react-scripts start\" \"nodemon server.js\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
