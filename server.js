@@ -6,8 +6,8 @@ var io = require('socket.io')(http);
 var moment = require('moment');
 
 // media assets
-var bottomText = require('../src/games/meme/bottom_text.json');
-var imgDir = require('../src/games/meme/meme_img.json');
+var bottomText = require('./src/games/meme/bottom_text.json');
+var imgDir = require('./src/games/meme/meme_img.json');
 
 // global variables
 var connectedUsers = {};
